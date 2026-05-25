@@ -5,9 +5,18 @@
   </view>
 
   <view class="quick-actions">
-    <button bindtap="handleWechat">微信咨询</button>
-    <button bindtap="handlePhone">电话联系</button>
-    <button bindtap="handleLocation">导航到店</button>
+    <view class="quick-action primary" bindtap="handleWechat">
+      <view class="action-icon">微</view>
+      <view class="action-text">微信咨询</view>
+    </view>
+    <view class="quick-action" bindtap="handlePhone">
+      <view class="action-icon">电</view>
+      <view class="action-text">电话联系</view>
+    </view>
+    <view class="quick-action" bindtap="handleLocation">
+      <view class="action-icon">店</view>
+      <view class="action-text">导航到店</view>
+    </view>
   </view>
 
   <view class="section card info-card">
