@@ -1,0 +1,35 @@
+{
+  "pages": [
+    "pages/home/home",
+    "pages/products/products",
+    "pages/product-detail/product-detail",
+    "pages/store/store"
+  ],
+  "window": {
+    "navigationBarTitleText": "\u8d1d\u8d1d\u5bb6\u7eba",
+    "navigationBarBackgroundColor": "#9b3430",
+    "navigationBarTextStyle": "white",
+    "backgroundColor": "#f7f4ef"
+  },
+  "tabBar": {
+    "color": "#7a7167",
+    "selectedColor": "#9b3430",
+    "backgroundColor": "#ffffff",
+    "borderStyle": "black",
+    "list": [
+      {
+        "pagePath": "pages/home/home",
+        "text": "\u9996\u9875"
+      },
+      {
+        "pagePath": "pages/products/products",
+        "text": "\u4ea7\u54c1"
+      },
+      {
+        "pagePath": "pages/store/store",
+        "text": "\u95e8\u5e97"
+      }
+    ]
+  },
+  "usingComponents": {}
+}
