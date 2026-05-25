@@ -1,33 +1,64 @@
 .products-page {
-  padding-bottom: 56rpx;
+  height: 100vh;
+  padding: 0;
+  overflow: hidden;
+  box-sizing: border-box;
 }
 
-.category-tabs {
-  white-space: nowrap;
-  margin: -4rpx -24rpx 28rpx;
-  padding: 4rpx 24rpx 14rpx;
+.products-layout {
+  display: grid;
+  grid-template-columns: 176rpx 1fr;
+  height: 100vh;
+  box-sizing: border-box;
+}
+
+.category-sidebar {
+  height: 100vh;
+  padding: 22rpx 12rpx 32rpx;
+  background: #f0f5f0;
   box-sizing: border-box;
 }
 
 .category-tab {
-  display: inline-flex;
+  position: relative;
+  display: flex;
   align-items: center;
-  justify-content: center;
-  height: 72rpx;
-  margin-right: 14rpx;
-  padding: 0 26rpx;
-  border-radius: 999rpx;
-  background: #ffffff;
+  min-height: 84rpx;
+  margin-bottom: 12rpx;
+  padding: 0 16rpx 0 20rpx;
+  border-radius: 18rpx;
+  background: transparent;
   color: #5d6962;
-  font-size: 26rpx;
-  font-weight: 800;
-  box-shadow: 0 8rpx 22rpx rgba(52, 72, 66, 0.06);
+  box-sizing: border-box;
 }
 
 .category-tab.active {
+  background: #ffffff;
+  color: #52796f;
+  box-shadow: 0 10rpx 24rpx rgba(82, 121, 111, 0.12);
+}
+
+.category-tab.active::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 22rpx;
+  bottom: 22rpx;
+  width: 6rpx;
+  border-radius: 999rpx;
   background: #52796f;
-  color: #ffffff;
-  box-shadow: 0 10rpx 24rpx rgba(82, 121, 111, 0.2);
+}
+
+.category-name {
+  font-size: 25rpx;
+  font-weight: 800;
+  line-height: 1.25;
+}
+
+.product-content {
+  height: 100vh;
+  padding: 24rpx 22rpx 56rpx;
+  box-sizing: border-box;
 }
 
 .product-grid {
@@ -37,6 +68,7 @@
 }
 
 .empty {
+  margin-top: 6rpx;
   padding: 48rpx 30rpx;
   text-align: center;
 }
