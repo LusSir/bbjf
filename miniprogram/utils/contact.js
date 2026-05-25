@@ -1,0 +1,57 @@
+const store = require("../config/store");
+
+function copyWechat() {
+  if (!store.wechatId) {
+    wx.showModal({
+      title: "微信咨询",
+      content: "微信号还未配置。正式发布前请补充门店微信号或客服入口。",
+      showCancel: false
+    });
+    return;
+  }
+
+  wx.setClipboardData({
+    data: store.wechatId,
+    success() {
+      wx.showToast({ title: "微信号已复制", icon: "success" });
+    }
+  });
+}
+
+function callStore() {
+  if (!store.phone) {
+    wx.showModal({
+      title: "电话联系",
+      content: "联系电话还未配置。正式发布前请补充门店电话。",
+      showCancel: false
+    });
+    return;
+  }
+
+  wx.makePhoneCall({ phoneNumber: store.phone });
+}
+
+function openStoreLocation() {
+  if (typeof store.latitude !== "number" || typeof store.longitude !== "number") {
+    wx.showModal({
+      title: "导航到店",
+      content: "门店经纬度还未配置。正式发布前请补充准确位置。",
+      showCancel: false
+    });
+    return;
+  }
+
+  wx.openLocation({
+    latitude: store.latitude,
+    longitude: store.longitude,
+    name: store.name,
+    address: store.address,
+    scale: 18
+  });
+}
+
+module.exports = {
+  copyWechat,
+  callStore,
+  openStoreLocation
+};
