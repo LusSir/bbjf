@@ -1,0 +1,54 @@
+<view class="page home-page">
+  <view class="hero">
+    <view class="hero-copy">
+      <view class="store-name">{{store.name}}</view>
+      <view class="store-slogan">{{store.slogan}}</view>
+    </view>
+    <view class="hero-note">花色、尺寸、库存以门店实物为准</view>
+  </view>
+
+  <view class="quick-actions">
+    <button bindtap="handleWechat">微信咨询</button>
+    <button bindtap="handlePhone">电话联系</button>
+    <button bindtap="handleLocation">导航到店</button>
+  </view>
+
+  <view class="section">
+    <view class="section-header">
+      <view class="section-title">产品分类</view>
+      <view class="section-link" bindtap="openProducts">全部产品</view>
+    </view>
+    <view class="category-grid">
+      <view
+        wx:for="{{categories}}"
+        wx:key="id"
+        class="category-card card"
+        data-id="{{item.id}}"
+        bindtap="openCategory"
+      >
+        <view class="category-name">{{item.name}}</view>
+        <view class="category-desc">{{item.description}}</view>
+      </view>
+    </view>
+  </view>
+
+  <view class="section" wx:if="{{specialProducts.length}}">
+    <view class="section-header">
+      <view class="section-title">特价专区</view>
+      <view class="section-link" bindtap="openProducts">查看更多</view>
+    </view>
+    <view class="product-grid">
+      <product-card wx:for="{{specialProducts}}" wx:key="id" product="{{item}}" />
+    </view>
+  </view>
+
+  <view class="section">
+    <view class="section-header">
+      <view class="section-title">热卖推荐</view>
+      <view class="section-link" bindtap="openProducts">更多</view>
+    </view>
+    <view class="product-grid">
+      <product-card wx:for="{{featuredProducts}}" wx:key="id" product="{{item}}" />
+    </view>
+  </view>
+</view>

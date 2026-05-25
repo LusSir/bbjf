@@ -1,0 +1,6 @@
+{
+  "navigationBarTitleText": "\u8d1d\u8d1d\u5bb6\u7eba",
+  "usingComponents": {
+    "product-card": "/components/product-card/product-card"
+  }
+}

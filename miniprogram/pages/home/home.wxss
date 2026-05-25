@@ -1,0 +1,79 @@
+.home-page {
+  padding-bottom: 48rpx;
+}
+
+.hero {
+  min-height: 260rpx;
+  padding: 34rpx;
+  border-radius: 16rpx;
+  background: linear-gradient(135deg, #9b3430, #d58a48);
+  color: #ffffff;
+}
+
+.store-name {
+  font-size: 48rpx;
+  font-weight: 800;
+}
+
+.store-slogan {
+  margin-top: 12rpx;
+  font-size: 26rpx;
+  opacity: 0.94;
+}
+
+.hero-note {
+  margin-top: 42rpx;
+  font-size: 24rpx;
+  opacity: 0.9;
+}
+
+.quick-actions {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12rpx;
+  margin-top: 20rpx;
+}
+
+.quick-actions button {
+  height: 82rpx;
+  line-height: 82rpx;
+  padding: 0;
+  border-radius: 12rpx;
+  background: #ffffff;
+  color: #9b3430;
+  font-size: 26rpx;
+  font-weight: 700;
+}
+
+.quick-actions button::after {
+  border: 0;
+}
+
+.category-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 16rpx;
+}
+
+.category-card {
+  padding: 22rpx;
+}
+
+.category-name {
+  color: #2f2b27;
+  font-size: 30rpx;
+  font-weight: 700;
+}
+
+.category-desc {
+  margin-top: 10rpx;
+  color: #7a7167;
+  font-size: 23rpx;
+  line-height: 1.45;
+}
+
+.product-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 16rpx;
+}
