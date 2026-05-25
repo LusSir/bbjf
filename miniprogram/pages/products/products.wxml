@@ -1,0 +1,22 @@
+<view class="page products-page">
+  <scroll-view class="category-tabs" scroll-x enable-flex>
+    <view
+      wx:for="{{categories}}"
+      wx:key="id"
+      class="category-tab {{selectedCategoryId === item.id ? 'active' : ''}}"
+      data-id="{{item.id}}"
+      bindtap="selectCategory"
+    >
+      {{item.name}}
+    </view>
+  </scroll-view>
+
+  <view wx:if="{{visibleProducts.length}}" class="product-grid">
+    <product-card wx:for="{{visibleProducts}}" wx:key="id" product="{{item}}" />
+  </view>
+
+  <view wx:else class="empty card">
+    <view class="empty-title">商品正在整理中</view>
+    <view class="empty-desc">该分类商品正在整理中，可先微信咨询或到店看看。</view>
+  </view>
+</view>
