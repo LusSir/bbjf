@@ -1,45 +1,58 @@
 .product-card {
   overflow: hidden;
+  transition: transform 0.18s ease;
 }
 
 .product-cover {
   position: relative;
-  height: 180rpx;
+  height: 188rpx;
 }
 
-.tone-warm { background: linear-gradient(135deg, #ead7c5, #b85648); }
-.tone-deep { background: linear-gradient(135deg, #d6c4a8, #6f3f2c); }
-.tone-soft { background: linear-gradient(135deg, #f2dedc, #c87982); }
-.tone-rose { background: linear-gradient(135deg, #f1c7c0, #a94c5a); }
-.tone-green { background: linear-gradient(135deg, #d8e5cf, #5e8f74); }
-.tone-red { background: linear-gradient(135deg, #e3a09a, #9b3430); }
-.tone-gold { background: linear-gradient(135deg, #edd59d, #c8872d); }
+.tone-warm { background: linear-gradient(135deg, #f8d7c8, #e9efe7); }
+.tone-deep { background: linear-gradient(135deg, #dfe9df, #86a99d); }
+.tone-soft { background: linear-gradient(135deg, #f8e3de, #f3b7a6); }
+.tone-rose { background: linear-gradient(135deg, #f7d8d0, #d99b9a); }
+.tone-green { background: linear-gradient(135deg, #e5efe5, #91b3a7); }
+.tone-red { background: linear-gradient(135deg, #f6c9bd, #d77768); }
+.tone-gold { background: linear-gradient(135deg, #f8e7bd, #f2b56f); }
+
+.product-cover::after {
+  content: "";
+  position: absolute;
+  right: -36rpx;
+  bottom: -42rpx;
+  width: 126rpx;
+  height: 126rpx;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.36);
+}
 
 .tag {
   position: absolute;
-  top: 12rpx;
-  left: 12rpx;
-  padding: 4rpx 12rpx;
+  top: 14rpx;
+  left: 14rpx;
+  z-index: 1;
+  padding: 6rpx 14rpx;
   border-radius: 999rpx;
-  background: rgba(255, 255, 255, 0.88);
-  color: #9b3430;
+  background: rgba(255, 255, 255, 0.78);
+  color: #52796f;
   font-size: 22rpx;
-  font-weight: 700;
+  font-weight: 800;
 }
 
 .product-info {
-  padding: 16rpx;
+  padding: 18rpx;
 }
 
 .product-name {
-  color: #2f2b27;
+  color: #27302b;
   font-size: 28rpx;
-  font-weight: 700;
+  font-weight: 800;
 }
 
 .product-highlights {
   margin-top: 8rpx;
-  color: #7a7167;
+  color: #7b786f;
   font-size: 22rpx;
   white-space: nowrap;
   overflow: hidden;
@@ -47,12 +60,17 @@
 }
 
 .product-price {
-  margin-top: 12rpx;
-  color: #9b3430;
+  display: inline-flex;
+  margin-top: 14rpx;
+  padding: 6rpx 12rpx;
+  border-radius: 999rpx;
+  background: #fff1ec;
+  color: #df765d;
   font-size: 26rpx;
-  font-weight: 700;
+  font-weight: 800;
 }
 
 .product-price.special {
-  color: #c46a20;
+  background: #fff4d8;
+  color: #c9792e;
 }

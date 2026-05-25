@@ -1,12 +1,16 @@
 .store-page {
-  padding-bottom: 48rpx;
+  padding-bottom: 56rpx;
 }
 
 .store-hero {
-  padding: 34rpx;
-  border-radius: 16rpx;
-  color: #ffffff;
-  background: linear-gradient(135deg, #9b3430, #d58a48);
+  padding: 38rpx;
+  border: 1rpx solid rgba(82, 121, 111, 0.12);
+  border-radius: 24rpx;
+  color: #27302b;
+  background:
+    linear-gradient(135deg, rgba(247, 181, 160, 0.32), rgba(210, 226, 215, 0.62)),
+    #fffdf8;
+  box-shadow: 0 18rpx 42rpx rgba(82, 121, 111, 0.1);
 }
 
 .store-name {
@@ -15,27 +19,28 @@
 }
 
 .store-slogan {
-  margin-top: 12rpx;
+  margin-top: 14rpx;
+  color: #50645b;
   font-size: 26rpx;
-  opacity: 0.94;
 }
 
 .quick-actions {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 12rpx;
-  margin-top: 20rpx;
+  gap: 14rpx;
+  margin-top: 22rpx;
 }
 
 .quick-actions button {
-  height: 82rpx;
-  line-height: 82rpx;
+  height: 86rpx;
+  line-height: 86rpx;
   padding: 0;
-  border-radius: 12rpx;
+  border-radius: 18rpx;
   background: #ffffff;
-  color: #9b3430;
+  color: #52796f;
   font-size: 26rpx;
-  font-weight: 700;
+  font-weight: 800;
+  box-shadow: 0 10rpx 26rpx rgba(82, 121, 111, 0.08);
 }
 
 .quick-actions button::after {
@@ -50,7 +55,7 @@
 
 .info-row {
   padding: 18rpx 0;
-  border-bottom: 1rpx solid #eee7df;
+  border-bottom: 1rpx solid #edf0eb;
 }
 
 .info-row:last-child {
@@ -58,13 +63,13 @@
 }
 
 .info-label {
-  color: #7a7167;
+  color: #7b786f;
   font-size: 24rpx;
 }
 
 .info-value {
   margin-top: 8rpx;
-  color: #2f2b27;
+  color: #27302b;
   font-size: 28rpx;
   line-height: 1.55;
 }
@@ -75,16 +80,16 @@
   justify-content: center;
   height: 260rpx;
   margin-top: 18rpx;
-  border-radius: 12rpx;
-  background: linear-gradient(135deg, #ead7c5, #b85648);
-  color: #ffffff;
+  border-radius: 18rpx;
+  background: linear-gradient(135deg, #e5efe5, #f8d7c8);
+  color: #52796f;
   font-size: 28rpx;
-  font-weight: 700;
+  font-weight: 800;
 }
 
 .faq-item {
   margin-top: 18rpx;
-  color: #4a433d;
+  color: #4c5650;
   font-size: 26rpx;
   line-height: 1.6;
 }
