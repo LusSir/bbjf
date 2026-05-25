@@ -1,0 +1,33 @@
+.contact-bar {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 20;
+  display: grid;
+  grid-template-columns: 1.2fr 1fr 1fr;
+  gap: 12rpx;
+  padding: 16rpx 20rpx calc(16rpx + env(safe-area-inset-bottom));
+  background: rgba(255, 255, 255, 0.96);
+  box-shadow: 0 -8rpx 24rpx rgba(58, 45, 35, 0.08);
+}
+
+.contact-button {
+  height: 76rpx;
+  line-height: 76rpx;
+  padding: 0;
+  border-radius: 10rpx;
+  background: #f0ebe3;
+  color: #2f2b27;
+  font-size: 26rpx;
+  font-weight: 700;
+}
+
+.contact-button::after {
+  border: 0;
+}
+
+.contact-button.primary {
+  background: #9b3430;
+  color: #ffffff;
+}
