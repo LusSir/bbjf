@@ -1,0 +1,28 @@
+<view wx:if="{{product}}" class="page detail-page safe-bottom">
+  <view class="detail-cover tone-{{product.imageTone || 'warm'}}">
+    <view wx:for="{{product.tags}}" wx:key="*this" class="detail-tag">{{item}}</view>
+  </view>
+
+  <view class="detail-main card">
+    <view class="detail-name">{{product.name}}</view>
+    <view class="detail-price {{product.priceType === 'special' ? 'special' : ''}}">{{product.priceText}}</view>
+    <view class="detail-note">花色、尺寸、库存以门店实物为准</view>
+  </view>
+
+  <view class="section card detail-section">
+    <view class="section-title">产品卖点</view>
+    <view wx:for="{{product.highlights}}" wx:key="*this" class="list-item">{{item}}</view>
+  </view>
+
+  <view class="section card detail-section">
+    <view class="section-title">规格信息</view>
+    <view wx:for="{{product.specs}}" wx:key="*this" class="list-item">{{item}}</view>
+  </view>
+
+  <view class="section card detail-section">
+    <view class="section-title">产品说明</view>
+    <view class="description">{{product.description}}</view>
+  </view>
+
+  <contact-bar />
+</view>

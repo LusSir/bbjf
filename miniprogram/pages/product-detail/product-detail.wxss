@@ -1,0 +1,76 @@
+.detail-page {
+  padding-bottom: 150rpx;
+}
+
+.detail-cover {
+  display: flex;
+  align-items: flex-start;
+  min-height: 420rpx;
+  padding: 24rpx;
+  border-radius: 16rpx;
+  box-sizing: border-box;
+}
+
+.tone-warm { background: linear-gradient(135deg, #ead7c5, #b85648); }
+.tone-deep { background: linear-gradient(135deg, #d6c4a8, #6f3f2c); }
+.tone-soft { background: linear-gradient(135deg, #f2dedc, #c87982); }
+.tone-rose { background: linear-gradient(135deg, #f1c7c0, #a94c5a); }
+.tone-green { background: linear-gradient(135deg, #d8e5cf, #5e8f74); }
+.tone-red { background: linear-gradient(135deg, #e3a09a, #9b3430); }
+.tone-gold { background: linear-gradient(135deg, #edd59d, #c8872d); }
+
+.detail-tag {
+  margin-right: 12rpx;
+  padding: 6rpx 16rpx;
+  border-radius: 999rpx;
+  background: rgba(255, 255, 255, 0.88);
+  color: #9b3430;
+  font-size: 24rpx;
+  font-weight: 700;
+}
+
+.detail-main {
+  margin-top: 18rpx;
+  padding: 26rpx;
+}
+
+.detail-name {
+  color: #2f2b27;
+  font-size: 40rpx;
+  font-weight: 800;
+}
+
+.detail-price {
+  margin-top: 14rpx;
+  color: #9b3430;
+  font-size: 34rpx;
+  font-weight: 800;
+}
+
+.detail-price.special {
+  color: #c46a20;
+}
+
+.detail-note {
+  margin-top: 12rpx;
+  color: #7a7167;
+  font-size: 24rpx;
+}
+
+.detail-section {
+  padding: 26rpx;
+}
+
+.list-item {
+  margin-top: 16rpx;
+  color: #4a433d;
+  font-size: 27rpx;
+  line-height: 1.55;
+}
+
+.description {
+  margin-top: 14rpx;
+  color: #4a433d;
+  font-size: 27rpx;
+  line-height: 1.65;
+}
