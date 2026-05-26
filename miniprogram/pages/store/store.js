@@ -17,7 +17,10 @@ Page({
     };
   },
   handleWechat() {
-    contact.copyWechat();
+    contact.openWechatQrCode();
+  },
+  previewWechatQr() {
+    contact.openWechatQrCode();
   },
   handlePhone() {
     contact.callStore();

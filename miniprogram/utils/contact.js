@@ -1,20 +1,18 @@
 const store = require("../config/store");
 
-function copyWechat() {
-  if (!store.wechatId) {
+function openWechatQrCode() {
+  if (!store.wechatQrCode) {
     wx.showModal({
       title: "微信咨询",
-      content: "微信号还未配置。正式发布前请补充门店微信号或客服入口。",
+      content: "微信二维码还未配置。请把二维码图片放到 miniprogram/assets/ 下，并在 store.js 配置 wechatQrCode。",
       showCancel: false
     });
     return;
   }
 
-  wx.setClipboardData({
-    data: store.wechatId,
-    success() {
-      wx.showToast({ title: "微信号已复制", icon: "success" });
-    }
+  wx.previewImage({
+    current: store.wechatQrCode,
+    urls: [store.wechatQrCode]
   });
 }
 
@@ -51,7 +49,7 @@ function openStoreLocation() {
 }
 
 module.exports = {
-  copyWechat,
+  openWechatQrCode,
   callStore,
   openStoreLocation
 };

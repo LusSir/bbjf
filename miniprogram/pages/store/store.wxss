@@ -84,6 +84,7 @@
 }
 
 .info-card,
+.qr-card,
 .photo-card,
 .faq-card {
   padding: 26rpx;
@@ -108,6 +109,45 @@
   color: #27302b;
   font-size: 28rpx;
   line-height: 1.55;
+}
+
+.qr-content {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 320rpx;
+  margin-top: 22rpx;
+  border-radius: 20rpx;
+  background: #f8f7f3;
+}
+
+.wechat-qr {
+  width: 280rpx;
+  height: 280rpx;
+  border-radius: 18rpx;
+  background: #ffffff;
+  box-shadow: 0 10rpx 24rpx rgba(52, 72, 66, 0.08);
+}
+
+.qr-placeholder {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 280rpx;
+  height: 280rpx;
+  border: 2rpx dashed rgba(82, 121, 111, 0.28);
+  border-radius: 18rpx;
+  color: #52796f;
+  font-size: 26rpx;
+  font-weight: 800;
+}
+
+.qr-tip {
+  margin-top: 16rpx;
+  color: #7b786f;
+  font-size: 24rpx;
+  line-height: 1.5;
+  text-align: center;
 }
 
 .store-photo {

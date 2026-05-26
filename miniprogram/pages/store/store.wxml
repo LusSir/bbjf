@@ -34,8 +34,23 @@
     </view>
     <view class="info-row">
       <view class="info-label">微信咨询</view>
-      <view class="info-value">{{store.wechatId || '正式发布前补充'}}</view>
+      <view class="info-value">{{store.wechatQrCode ? '扫码添加微信咨询' : '正式发布前补充二维码'}}</view>
     </view>
+  </view>
+
+  <view class="section card qr-card">
+    <view class="section-title">微信咨询</view>
+    <view class="qr-content" bindtap="previewWechatQr">
+      <image
+        wx:if="{{store.wechatQrCode}}"
+        class="wechat-qr"
+        src="{{store.wechatQrCode}}"
+        mode="aspectFit"
+        show-menu-by-longpress="{{true}}"
+      />
+      <view wx:else class="qr-placeholder">待上传微信二维码</view>
+    </view>
+    <view class="qr-tip">点击二维码可放大查看，长按图片可保存或识别。</view>
   </view>
 
   <view class="section card photo-card">

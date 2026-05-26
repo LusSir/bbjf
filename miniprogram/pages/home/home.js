@@ -24,7 +24,7 @@ Page({
     };
   },
   handleWechat() {
-    contact.copyWechat();
+    contact.openWechatQrCode();
   },
   handlePhone() {
     contact.callStore();
