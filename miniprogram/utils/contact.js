@@ -10,9 +10,21 @@ function openWechatQrCode() {
     return;
   }
 
-  wx.previewImage({
-    current: store.wechatQrCode,
-    urls: [store.wechatQrCode]
+  wx.getImageInfo({
+    src: store.wechatQrCode,
+    success(res) {
+      wx.previewImage({
+        current: res.path,
+        urls: [res.path]
+      });
+    },
+    fail() {
+      wx.showModal({
+        title: "二维码加载失败",
+        content: "请确认微信二维码图片已放入 miniprogram/assets/，并且 store.js 中的 wechatQrCode 路径正确。",
+        showCancel: false
+      });
+    }
   });
 }
 
