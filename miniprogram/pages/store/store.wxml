@@ -55,7 +55,18 @@
 
   <view class="section card photo-card">
     <view class="section-title">门店实拍</view>
-    <view class="store-photo">门头 / 店内实拍图后续替换</view>
+    <scroll-view wx:if="{{store.storePhotos && store.storePhotos.length}}" class="store-photo-list" scroll-x enable-flex>
+      <image
+        wx:for="{{store.storePhotos}}"
+        wx:key="*this"
+        class="store-photo"
+        src="{{item}}"
+        mode="aspectFill"
+        data-src="{{item}}"
+        bindtap="previewStorePhoto"
+      />
+    </scroll-view>
+    <view wx:else class="store-photo-placeholder">门头 / 店内实拍图后续替换</view>
   </view>
 
   <view class="section card faq-card">

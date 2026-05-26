@@ -22,6 +22,13 @@ Page({
   previewWechatQr() {
     contact.openWechatQrCode();
   },
+  previewStorePhoto(event) {
+    const current = event.currentTarget.dataset.src;
+    wx.previewImage({
+      current,
+      urls: this.data.store.storePhotos
+    });
+  },
   handlePhone() {
     contact.callStore();
   },
