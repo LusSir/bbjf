@@ -29,5 +29,8 @@ assert.strictEqual(draft.status, "active");
 
 assert.throws(() => model.normalizeProductInput({ name: "缺少编号" }), /商品编号/);
 assert.throws(() => model.normalizeProductInput({ id: "bad id", name: "错误编号" }), /英文/);
+assert.strictEqual(model.getCategoryName([{ id: "mats", name: "凉席" }], "mats"), "凉席");
+assert.strictEqual(model.getCategoryName([{ id: "mats", name: "凉席" }], "unknown"), "未选择");
+assert.strictEqual(model.buildNextProductId([{ id: "P0001" }, { id: "P0009" }]), "P0010");
 
 console.log("product model tests passed");

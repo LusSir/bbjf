@@ -22,17 +22,20 @@ function assertProductId(id) {
   if (!id) {
     throw new Error("请填写商品编号");
   }
-  if (!/^[a-z0-9][a-z0-9-]*$/.test(id)) {
-    throw new Error("商品编号只能使用英文小写、数字和短横线");
+  if (!/^[a-z0-9][a-z0-9-]*$/i.test(id)) {
+    throw new Error("商品编号只能使用英文、数字和短横线");
   }
 }
 
-function normalizeProductInput(input) {
+function normalizeProductInput(input, options) {
+  const allowEmptyId = Boolean(options && options.allowEmptyId);
   const id = trimText(input.id);
   const name = trimText(input.name);
   const categoryId = trimText(input.categoryId);
 
-  assertProductId(id);
+  if (id || !allowEmptyId) {
+    assertProductId(id);
+  }
   if (!name) {
     throw new Error("请填写商品名称");
   }
@@ -80,7 +83,23 @@ function productToForm(product) {
   };
 }
 
+function getCategoryName(categories, categoryId) {
+  const category = (categories || []).find((item) => item.id === categoryId);
+  return category ? category.name : "未选择";
+}
+
+function buildNextProductId(products) {
+  const max = (products || []).reduce((currentMax, item) => {
+    const match = String(item.id || "").match(/^P(\d+)$/i);
+    if (!match) return currentMax;
+    return Math.max(currentMax, Number(match[1]) || 0);
+  }, 0);
+  return `P${String(max + 1).padStart(4, "0")}`;
+}
+
 module.exports = {
+  buildNextProductId,
+  getCategoryName,
   normalizeProductInput,
   productToForm,
   splitLines

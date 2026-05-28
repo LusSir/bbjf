@@ -87,6 +87,12 @@
   align-items: center;
 }
 
+.readonly-value {
+  display: flex;
+  align-items: center;
+  color: #7b786f;
+}
+
 .image-row {
   display: flex;
   align-items: center;

@@ -19,14 +19,15 @@ function listFrom(value) {
   return trimText(value).split(/\r?\n|\|/).map((item) => item.trim()).filter(Boolean);
 }
 
-function normalizeProduct(input) {
+function normalizeProduct(input, options) {
+  const allowEmptyId = Boolean(options && options.allowEmptyId);
   const product = input || {};
   const id = trimText(product.id);
   const name = trimText(product.name);
   const categoryId = trimText(product.categoryId);
 
-  if (!id) throw new Error("请填写商品编号");
-  if (!/^[a-z0-9][a-z0-9-]*$/.test(id)) throw new Error("商品编号只能使用英文小写、数字和短横线");
+  if (!id && !allowEmptyId) throw new Error("请填写商品编号");
+  if (id && !/^[a-z0-9][a-z0-9-]*$/i.test(id)) throw new Error("商品编号只能使用英文、数字和短横线");
   if (!name) throw new Error("请填写商品名称");
   if (!categoryId) throw new Error("请选择商品分类");
 
@@ -95,10 +96,23 @@ async function getProduct(id) {
   }
 }
 
+async function buildNextProductId() {
+  const products = await listProducts(true);
+  const max = products.reduce((currentMax, item) => {
+    const match = String(item.id || "").match(/^P(\d+)$/i);
+    if (!match) return currentMax;
+    return Math.max(currentMax, Number(match[1]) || 0);
+  }, 0);
+  return `P${String(max + 1).padStart(4, "0")}`;
+}
+
 async function saveProduct(product, openid) {
   await assertAdmin(openid);
   await ensureProductsCollection();
-  const normalized = normalizeProduct(product);
+  const normalized = normalizeProduct(product, { allowEmptyId: true });
+  if (!normalized.id) {
+    normalized.id = await buildNextProductId();
+  }
   const existed = await getProduct(normalized.id);
   const now = db.serverDate();
 

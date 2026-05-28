@@ -15,6 +15,8 @@ Page({
     products: [],
     form: defaultForm,
     editingId: "",
+    nextProductId: "P0001",
+    selectedCategoryName: productModel.getCategoryName(categories, defaultCategoryId),
     saving: false,
     uploading: false
   },
@@ -46,7 +48,10 @@ Page({
   },
   loadProducts() {
     productsService.listProducts({ includeDraft: true }).then((products) => {
-      this.setData({ products });
+      this.setData({
+        products,
+        nextProductId: productModel.buildNextProductId(products)
+      });
     });
   },
   updateField(event) {
@@ -66,7 +71,8 @@ Page({
     const category = this.data.categories[index];
     if (!category) return;
     this.setData({
-      "form.categoryId": category.id
+      "form.categoryId": category.id,
+      selectedCategoryName: category.name
     });
   },
   editProduct(event) {
@@ -75,21 +81,18 @@ Page({
     if (!product) return;
     this.setData({
       editingId: id,
-      form: productModel.productToForm(product)
+      form: productModel.productToForm(product),
+      selectedCategoryName: productModel.getCategoryName(this.data.categories, product.categoryId)
     });
   },
   resetForm() {
     this.setData({
       editingId: "",
-      form: productModel.productToForm({ categoryId: defaultCategoryId, sort: 10 })
+      form: productModel.productToForm({ categoryId: defaultCategoryId, sort: 10 }),
+      selectedCategoryName: productModel.getCategoryName(this.data.categories, defaultCategoryId)
     });
   },
   chooseImage() {
-    if (!this.data.form.id) {
-      wx.showToast({ title: "请先填写商品编号", icon: "none" });
-      return;
-    }
-
     wx.chooseImage({
       count: 1,
       sizeType: ["compressed"],
@@ -103,7 +106,8 @@ Page({
   uploadImage(tempPath) {
     const extMatch = tempPath.match(/\.(jpg|jpeg|png|webp)$/i);
     const ext = extMatch ? extMatch[1].toLowerCase() : "jpg";
-    const cloudPath = `products/${this.data.form.id}-${Date.now()}.${ext}`;
+    const productId = this.data.form.id || this.data.nextProductId || "new-product";
+    const cloudPath = `products/${productId}-${Date.now()}.${ext}`;
 
     this.setData({ uploading: true });
     wx.cloud.uploadFile({
@@ -126,7 +130,7 @@ Page({
   saveProduct() {
     let product;
     try {
-      product = productModel.normalizeProductInput(this.data.form);
+      product = productModel.normalizeProductInput(this.data.form, { allowEmptyId: !this.data.editingId });
     } catch (error) {
       wx.showToast({ title: error.message, icon: "none" });
       return;

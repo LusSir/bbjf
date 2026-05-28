@@ -20,7 +20,8 @@
 
       <view class="form-field">
         <view class="field-label">商品编号</view>
-        <input class="field-input" value="{{form.id}}" disabled="{{!!editingId}}" data-field="id" bindinput="updateField" placeholder="cotton-set-001" />
+        <input wx:if="{{editingId}}" class="field-input" value="{{form.id}}" disabled="{{true}}" />
+        <view wx:else class="field-input readonly-value">保存后自动生成：{{nextProductId}}</view>
       </view>
 
       <view class="form-field">
@@ -31,7 +32,7 @@
       <view class="form-field">
         <view class="field-label">商品分类</view>
         <picker range="{{categories}}" range-key="name" bindchange="changeCategory">
-          <view class="field-input picker-value">{{form.categoryId}}</view>
+          <view class="field-input picker-value">{{selectedCategoryName}}</view>
         </picker>
       </view>
 
