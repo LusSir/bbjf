@@ -1,7 +1,7 @@
 const store = require("../../config/store");
 const categories = require("../../data/categories");
-const products = require("../../data/products");
 const contact = require("../../utils/contact");
+const productsService = require("../../utils/products-service");
 
 Page({
   data: {
@@ -12,9 +12,19 @@ Page({
   },
   onLoad() {
     this.setData({
-      categories: categories.slice().sort((a, b) => a.sort - b.sort),
-      featuredProducts: products.filter((item) => item.isFeatured).slice(0, 4),
-      specialProducts: products.filter((item) => item.isSpecial).slice(0, 2)
+      categories: categories.slice().sort((a, b) => a.sort - b.sort)
+    });
+    this.loadProducts();
+  },
+  onShow() {
+    this.loadProducts();
+  },
+  loadProducts() {
+    productsService.listProducts().then((products) => {
+      this.setData({
+        featuredProducts: products.filter((item) => item.isFeatured).slice(0, 4),
+        specialProducts: products.filter((item) => item.isSpecial).slice(0, 2)
+      });
     });
   },
   onShareAppMessage() {

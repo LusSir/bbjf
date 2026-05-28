@@ -1,19 +1,20 @@
 const store = require("../../config/store");
-const products = require("../../data/products");
+const productsService = require("../../utils/products-service");
 
 Page({
   data: {
     product: null
   },
   onLoad(options) {
-    const product = products.find((item) => item.id === options.id);
-    if (!product) {
-      wx.showToast({ title: "商品不存在", icon: "none" });
-      return;
-    }
+    productsService.getProductById(options.id).then((product) => {
+      if (!product) {
+        wx.showToast({ title: "商品不存在", icon: "none" });
+        return;
+      }
 
-    wx.setNavigationBarTitle({ title: product.name });
-    this.setData({ product });
+      wx.setNavigationBarTitle({ title: product.name });
+      this.setData({ product });
+    });
   },
   onShareAppMessage() {
     const product = this.data.product;

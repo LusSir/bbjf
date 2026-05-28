@@ -1,2 +1,4 @@
 .superpowers/
 project.private.config.json
+cloudfunctions/**/node_modules/
+cloudfunctions/**/package-lock.json

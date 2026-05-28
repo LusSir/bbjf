@@ -1,0 +1,33 @@
+const assert = require("assert");
+const model = require("../miniprogram/utils/product-model");
+
+const draft = model.normalizeProductInput({
+  id: " cotton-set-002 ",
+  categoryId: "sets",
+  name: " 纯棉四件套 ",
+  priceText: "¥299 起",
+  image: "cotton-set-002.jpg",
+  tagsText: "热卖\n纯棉",
+  highlightsText: "亲肤透气\n多花色可选",
+  specsText: "床型：1.5m / 1.8m\n材质：纯棉",
+  description: "到店可看实物",
+  isFeatured: true,
+  isSpecial: false,
+  isNew: true,
+  sort: "20",
+  status: "active"
+});
+
+assert.strictEqual(draft.id, "cotton-set-002");
+assert.strictEqual(draft.name, "纯棉四件套");
+assert.deepStrictEqual(draft.tags, ["热卖", "纯棉"]);
+assert.deepStrictEqual(draft.highlights, ["亲肤透气", "多花色可选"]);
+assert.deepStrictEqual(draft.specs, ["床型：1.5m / 1.8m", "材质：纯棉"]);
+assert.strictEqual(draft.image, "/assets/products/cotton-set-002.jpg");
+assert.strictEqual(draft.sort, 20);
+assert.strictEqual(draft.status, "active");
+
+assert.throws(() => model.normalizeProductInput({ name: "缺少编号" }), /商品编号/);
+assert.throws(() => model.normalizeProductInput({ id: "bad id", name: "错误编号" }), /英文/);
+
+console.log("product model tests passed");

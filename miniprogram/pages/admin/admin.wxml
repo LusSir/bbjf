@@ -16,8 +16,99 @@
     </view>
 
     <view class="card manage-card">
-      <view class="section-title">商品管理</view>
-      <view class="manage-desc">下一步会在这里接入商品新增、编辑、上下架和图片上传。</view>
+      <view class="section-title">{{editingId ? '编辑商品' : '新增商品'}}</view>
+
+      <view class="form-field">
+        <view class="field-label">商品编号</view>
+        <input class="field-input" value="{{form.id}}" disabled="{{!!editingId}}" data-field="id" bindinput="updateField" placeholder="cotton-set-001" />
+      </view>
+
+      <view class="form-field">
+        <view class="field-label">商品名称</view>
+        <input class="field-input" value="{{form.name}}" data-field="name" bindinput="updateField" placeholder="纯棉四件套" />
+      </view>
+
+      <view class="form-field">
+        <view class="field-label">商品分类</view>
+        <picker range="{{categories}}" range-key="name" bindchange="changeCategory">
+          <view class="field-input picker-value">{{form.categoryId}}</view>
+        </picker>
+      </view>
+
+      <view class="form-field">
+        <view class="field-label">价格文案</view>
+        <input class="field-input" value="{{form.priceText}}" data-field="priceText" bindinput="updateField" placeholder="¥199 起 / 到店咨询价" />
+      </view>
+
+      <view class="form-field">
+        <view class="field-label">商品图片</view>
+        <view class="image-row">
+          <image wx:if="{{form.image}}" class="form-image" src="{{form.image}}" mode="aspectFill" />
+          <view wx:else class="image-placeholder">未上传</view>
+          <button class="small-button" loading="{{uploading}}" bindtap="chooseImage">上传图片</button>
+        </view>
+      </view>
+
+      <view class="form-field">
+        <view class="field-label">标签</view>
+        <textarea class="field-textarea" value="{{form.tagsText}}" data-field="tagsText" bindinput="updateField" placeholder="一行一个，例如：热卖" />
+      </view>
+
+      <view class="form-field">
+        <view class="field-label">产品卖点</view>
+        <textarea class="field-textarea" value="{{form.highlightsText}}" data-field="highlightsText" bindinput="updateField" placeholder="一行一个卖点" />
+      </view>
+
+      <view class="form-field">
+        <view class="field-label">规格信息</view>
+        <textarea class="field-textarea" value="{{form.specsText}}" data-field="specsText" bindinput="updateField" placeholder="一行一个规格" />
+      </view>
+
+      <view class="form-field">
+        <view class="field-label">产品说明</view>
+        <textarea class="field-textarea" value="{{form.description}}" data-field="description" bindinput="updateField" placeholder="适合日常家用，到店可看实物" />
+      </view>
+
+      <view class="switch-grid">
+        <label class="switch-row">
+          <text>首页推荐</text>
+          <switch checked="{{form.isFeatured}}" data-field="isFeatured" bindchange="updateSwitch" color="#52796f" />
+        </label>
+        <label class="switch-row">
+          <text>特价</text>
+          <switch checked="{{form.isSpecial}}" data-field="isSpecial" bindchange="updateSwitch" color="#52796f" />
+        </label>
+        <label class="switch-row">
+          <text>新品</text>
+          <switch checked="{{form.isNew}}" data-field="isNew" bindchange="updateSwitch" color="#52796f" />
+        </label>
+      </view>
+
+      <view class="form-field inline-field">
+        <view class="field-label">排序</view>
+        <input class="field-input short-input" type="number" value="{{form.sort}}" data-field="sort" bindinput="updateField" />
+      </view>
+
+      <view class="form-actions">
+        <button class="primary-button" loading="{{saving}}" bindtap="saveProduct">保存商品</button>
+        <button class="secondary-button" bindtap="resetForm">清空</button>
+      </view>
+    </view>
+
+    <view class="card manage-card">
+      <view class="section-title">商品列表</view>
+      <view wx:if="{{!products.length}}" class="manage-desc">还没有云端商品，保存第一件商品后会显示在这里。</view>
+      <view wx:for="{{products}}" wx:key="id" class="admin-product">
+        <image wx:if="{{item.image}}" class="admin-product-image" src="{{item.image}}" mode="aspectFill" />
+        <view class="admin-product-main">
+          <view class="admin-product-name">{{item.name}}</view>
+          <view class="admin-product-meta">{{item.id}} · {{item.priceText}}</view>
+        </view>
+        <view class="admin-product-actions">
+          <button class="mini-button" data-id="{{item.id}}" bindtap="editProduct">编辑</button>
+          <button class="mini-button danger" data-id="{{item.id}}" bindtap="deleteProduct">删除</button>
+        </view>
+      </view>
     </view>
   </view>
 </view>

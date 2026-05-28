@@ -1,31 +1,44 @@
 const categories = require("../../data/categories");
-const products = require("../../data/products");
+const productsService = require("../../utils/products-service");
 
-function getProductsByCategory(categoryId) {
+function getProductsByCategory(products, categoryId) {
   return products.filter((item) => item.categoryId === categoryId);
 }
 
 Page({
   data: {
     categories: [],
+    products: [],
     selectedCategoryId: "",
-    visibleProducts: []
+    visibleProducts: [],
+    loading: false
   },
   onLoad() {
     const sortedCategories = categories.slice().sort((a, b) => a.sort - b.sort);
     const selectedCategoryId = sortedCategories[0] ? sortedCategories[0].id : "";
     this.setData({
       categories: sortedCategories,
-      selectedCategoryId,
-      visibleProducts: getProductsByCategory(selectedCategoryId)
+      selectedCategoryId
     });
+    this.loadProducts();
   },
   onShow() {
     const storedCategoryId = wx.getStorageSync("selectedCategoryId");
-    if (!storedCategoryId) return;
-
-    wx.removeStorageSync("selectedCategoryId");
-    this.selectCategoryById(storedCategoryId);
+    if (storedCategoryId) {
+      wx.removeStorageSync("selectedCategoryId");
+      this.setData({ selectedCategoryId: storedCategoryId });
+    }
+    this.loadProducts();
+  },
+  loadProducts() {
+    this.setData({ loading: true });
+    productsService.listProducts().then((products) => {
+      this.setData({
+        products,
+        visibleProducts: getProductsByCategory(products, this.data.selectedCategoryId),
+        loading: false
+      });
+    });
   },
   selectCategory(event) {
     this.selectCategoryById(event.currentTarget.dataset.id);
@@ -36,7 +49,7 @@ Page({
 
     this.setData({
       selectedCategoryId: categoryId,
-      visibleProducts: getProductsByCategory(categoryId)
+      visibleProducts: getProductsByCategory(this.data.products, categoryId)
     });
   }
 });
