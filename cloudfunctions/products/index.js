@@ -57,13 +57,21 @@ async function assertAdmin(openid) {
   }
 }
 
+function isCollectionAlreadyExistsError(error) {
+  const message = error && error.message ? error.message : String(error || "");
+  return message.includes("already exists")
+    || message.includes("collection exists")
+    || message.includes("Table exist")
+    || message.includes("ResourceExist")
+    || message.includes("DATABASE_COLLECTION_ALREADY_EXIST");
+}
+
 async function ensureProductsCollection() {
   if (!db.createCollection) return;
   try {
     await db.createCollection(PRODUCTS_COLLECTION);
   } catch (error) {
-    const message = error && error.message ? error.message : "";
-    if (!message.includes("already exists") && !message.includes("collection exists")) {
+    if (!isCollectionAlreadyExistsError(error)) {
       throw error;
     }
   }
@@ -154,7 +162,7 @@ async function deleteProduct(id, openid) {
   return true;
 }
 
-exports.main = async (event) => {
+async function main(event) {
   const wxContext = cloud.getWXContext();
   const action = event && event.action;
   const data = event && event.data ? event.data : {};
@@ -173,4 +181,7 @@ exports.main = async (event) => {
   }
 
   throw new Error("未知商品操作");
-};
+}
+
+exports.main = main;
+exports.isCollectionAlreadyExistsError = isCollectionAlreadyExistsError;
