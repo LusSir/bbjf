@@ -61,6 +61,43 @@
   background: #eef5ef;
 }
 
+.account-entry {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24rpx;
+  margin-top: 22rpx;
+  padding: 26rpx;
+}
+
+.account-title {
+  color: #27302b;
+  font-size: 30rpx;
+  font-weight: 900;
+}
+
+.account-desc {
+  margin-top: 8rpx;
+  color: #7b786f;
+  font-size: 24rpx;
+  line-height: 1.45;
+}
+
+.account-badge {
+  flex: 0 0 auto;
+  padding: 12rpx 20rpx;
+  border-radius: 999rpx;
+  background: #eef5ef;
+  color: #52796f;
+  font-size: 24rpx;
+  font-weight: 900;
+}
+
+.account-badge.admin {
+  background: #ffe8df;
+  color: #df765d;
+}
+
 .action-icon {
   display: flex;
   align-items: center;

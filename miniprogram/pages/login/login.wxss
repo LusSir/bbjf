@@ -1,0 +1,68 @@
+.login-page {
+  padding-top: 80rpx;
+}
+
+.login-card {
+  padding: 38rpx;
+}
+
+.login-title {
+  color: #27302b;
+  font-size: 42rpx;
+  font-weight: 900;
+}
+
+.login-desc {
+  margin-top: 16rpx;
+  color: #69746e;
+  font-size: 26rpx;
+  line-height: 1.6;
+}
+
+.user-panel {
+  margin-top: 30rpx;
+  padding: 24rpx;
+  border-radius: 20rpx;
+  background: #f8f7f3;
+}
+
+.status-pill {
+  display: inline-flex;
+  padding: 8rpx 18rpx;
+  border-radius: 999rpx;
+  background: #eef5ef;
+  color: #52796f;
+  font-size: 24rpx;
+  font-weight: 800;
+}
+
+.status-pill.admin {
+  background: #ffe8df;
+  color: #df765d;
+}
+
+.openid-text {
+  margin-top: 16rpx;
+  color: #7b786f;
+  font-size: 22rpx;
+  line-height: 1.5;
+  word-break: break-all;
+}
+
+.primary-button,
+.secondary-button {
+  margin-top: 30rpx;
+  border-radius: 18rpx;
+  font-size: 28rpx;
+  font-weight: 800;
+}
+
+.primary-button {
+  color: #ffffff;
+  background: #52796f;
+}
+
+.secondary-button {
+  color: #52796f;
+  background: #eef5ef;
+}

@@ -1,0 +1,23 @@
+<view class="page admin-page">
+  <view wx:if="{{checking}}" class="card state-card">
+    <view class="state-title">正在校验权限</view>
+  </view>
+
+  <view wx:elif="{{!allowed}}" class="card state-card">
+    <view class="state-title">无法进入商铺管理</view>
+    <view class="state-desc">当前微信账号还不是管理员，请先登录，或在云开发 users 集合中把该用户 role 改为 admin。</view>
+    <button class="primary-button" bindtap="openLogin">去登录</button>
+  </view>
+
+  <view wx:else>
+    <view class="admin-hero">
+      <view class="admin-title">商铺管理</view>
+      <view class="admin-desc">当前账号已通过管理员校验。</view>
+    </view>
+
+    <view class="card manage-card">
+      <view class="section-title">商品管理</view>
+      <view class="manage-desc">下一步会在这里接入商品新增、编辑、上下架和图片上传。</view>
+    </view>
+  </view>
+</view>

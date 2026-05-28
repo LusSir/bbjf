@@ -1,0 +1,42 @@
+.admin-page {
+  padding-bottom: 56rpx;
+}
+
+.state-card,
+.manage-card {
+  padding: 34rpx;
+}
+
+.state-title,
+.admin-title {
+  color: #27302b;
+  font-size: 36rpx;
+  font-weight: 900;
+}
+
+.state-desc,
+.admin-desc,
+.manage-desc {
+  margin-top: 16rpx;
+  color: #69746e;
+  font-size: 26rpx;
+  line-height: 1.6;
+}
+
+.admin-hero {
+  padding: 38rpx;
+  border-radius: 24rpx;
+  background:
+    linear-gradient(135deg, rgba(247, 181, 160, 0.35), rgba(210, 226, 215, 0.72)),
+    #fffdf8;
+  box-shadow: 0 18rpx 42rpx rgba(82, 121, 111, 0.1);
+}
+
+.primary-button {
+  margin-top: 30rpx;
+  border-radius: 18rpx;
+  color: #ffffff;
+  background: #52796f;
+  font-size: 28rpx;
+  font-weight: 800;
+}

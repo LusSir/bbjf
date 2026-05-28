@@ -1,0 +1,21 @@
+<view class="page login-page">
+  <view class="login-card card">
+    <view class="login-title">贝贝家纺</view>
+    <view class="login-desc">登录后可识别管理员身份，管理员可进入商铺管理。</view>
+
+    <view wx:if="{{user}}" class="user-panel">
+      <view class="status-pill {{isAdmin ? 'admin' : ''}}">
+        {{isAdmin ? '管理员' : '普通用户'}}
+      </view>
+      <view class="openid-text">OpenID：{{user.openid}}</view>
+    </view>
+
+    <button class="primary-button" loading="{{loading}}" bindtap="handleLogin">
+      {{user ? '刷新登录状态' : '微信登录'}}
+    </button>
+
+    <button wx:if="{{isAdmin}}" class="secondary-button" bindtap="openAdmin">
+      进入商铺管理
+    </button>
+  </view>
+</view>

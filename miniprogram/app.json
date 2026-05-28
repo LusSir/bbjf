@@ -3,7 +3,9 @@
     "pages/home/home",
     "pages/products/products",
     "pages/product-detail/product-detail",
-    "pages/store/store"
+    "pages/store/store",
+    "pages/login/login",
+    "pages/admin/admin"
   ],
   "window": {
     "navigationBarTitleText": "\u8d1d\u8d1d\u5bb6\u7eba",

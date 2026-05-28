@@ -15,5 +15,6 @@
   "appid": "wx4d5280f1c259e088",
   "projectname": "bbjf",
   "miniprogramRoot": "miniprogram/",
+  "cloudfunctionRoot": "cloudfunctions/",
   "condition": {}
 }

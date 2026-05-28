@@ -1,4 +1,0 @@
-id,categoryId,name,priceText,image,tags,highlights,specs,description,isFeatured,isSpecial,isNew,sort,status
-cotton-set-001,sets,纯棉四件套,¥199 起,cotton-set-001.jpg,热卖|纯棉,亲肤透气|多花色可选|到店可看实物,适用床型：1.5m / 1.8m|材质：纯棉|颜色：多款可选,适合日常家用的成品床品，具体花色和库存以到店为准。,true,false,false,10,active
-winter-quilt-001,quilts,保暖冬被芯,到店咨询价,winter-quilt-001.jpg,热卖|保暖,蓬松保暖|多尺寸可选|适合秋冬,尺寸：多规格|厚度：冬被|库存：以门店为准,秋冬保暖被芯，适合到店根据床型和厚度需求挑选。,true,false,false,20,active
-pillow-001,pillows,舒睡枕芯,微信咨询价,pillow-001.jpg,舒适|成品,软硬适中|日常家用|可搭配床品,规格：单只装|高度：多款可选|材质：以实物为准,日常睡眠枕芯，可到店试摸手感后选择。,false,false,true,30,active

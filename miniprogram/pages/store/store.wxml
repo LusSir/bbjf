@@ -19,6 +19,14 @@
     </view>
   </view>
 
+  <view class="account-entry card" bindtap="handleAccountEntry">
+    <view>
+      <view class="account-title">{{isAdmin ? '商铺管理' : '管理员登录'}}</view>
+      <view class="account-desc">{{isAdmin ? '管理商品、门店信息和后续功能' : '管理员登录后可进入商铺管理'}}</view>
+    </view>
+    <view class="account-badge {{isAdmin ? 'admin' : ''}}">{{isAdmin ? '进入' : '登录'}}</view>
+  </view>
+
   <view class="section card info-card">
     <view class="info-row">
       <view class="info-label">门店地址</view>
