@@ -7,6 +7,7 @@ cloud.init({
 const db = cloud.database();
 const _ = db.command;
 const PRODUCTS_COLLECTION = "products";
+const PRODUCT_COUNTER_DOC_ID = "__product_counter__";
 
 function trimText(value) {
   return String(value || "").trim();
@@ -70,7 +71,7 @@ async function listProducts(includeDraft) {
   const where = includeDraft ? {} : { status: _.neq("draft") };
   try {
     const result = await db.collection(PRODUCTS_COLLECTION).where(where).orderBy("sort", "asc").limit(100).get();
-    return result.data;
+    return result.data.filter((item) => item.type !== "counter");
   } catch (error) {
     const message = error && error.message ? error.message : "";
     if (message.includes("collection not exists") || message.includes("COLLECTION_NOT_EXIST")) {
@@ -93,21 +94,70 @@ async function getProduct(id) {
   }
 }
 
-async function buildNextProductId() {
-  const products = await listProducts(true);
-  const max = products.reduce((currentMax, item) => {
+function formatProductId(sequence) {
+  return `P${String(sequence).padStart(4, "0")}`;
+}
+
+function getMaxProductSequence(products) {
+  return (products || []).reduce((currentMax, item) => {
     const match = String(item.id || "").match(/^P(\d+)$/i);
     if (!match) return currentMax;
     return Math.max(currentMax, Number(match[1]) || 0);
   }, 0);
-  return `P${String(max + 1).padStart(4, "0")}`;
+}
+
+async function getInitialProductSequence() {
+  const products = await listProducts(true);
+  return getMaxProductSequence(products);
+}
+
+async function allocateProductId() {
+  if (!db.runTransaction) {
+    throw new Error("当前云开发 SDK 不支持事务，请升级 wx-server-sdk 后重试");
+  }
+
+  const initialSequence = await getInitialProductSequence();
+  const sequence = await db.runTransaction(async (transaction) => {
+    const counterRef = transaction.collection(PRODUCTS_COLLECTION).doc(PRODUCT_COUNTER_DOC_ID);
+    let currentValue = initialSequence;
+    let counterExists = false;
+
+    try {
+      const counter = await counterRef.get();
+      if (counter && counter.data && typeof counter.data.value === "number") {
+        currentValue = Math.max(counter.data.value, initialSequence);
+      }
+      counterExists = true;
+    } catch (error) {
+      const message = error && error.message ? error.message : "";
+      if (!message.includes("document not exists") && !message.includes("DOCUMENT_NOT_EXIST") && !message.includes("does not exist")) {
+        throw error;
+      }
+    }
+
+    const nextValue = currentValue + 1;
+    const data = {
+      type: "counter",
+      value: nextValue,
+      updatedAt: db.serverDate()
+    };
+
+    if (!counterExists) {
+      data.createdAt = db.serverDate();
+    }
+
+    await counterRef.set({ data });
+    return nextValue;
+  });
+
+  return formatProductId(sequence);
 }
 
 async function saveProduct(product, openid) {
   await assertAdmin(openid);
   const normalized = normalizeProduct(product, { allowEmptyId: true });
   if (!normalized.id) {
-    normalized.id = await buildNextProductId();
+    normalized.id = await allocateProductId();
   }
   const existed = await getProduct(normalized.id);
   const now = db.serverDate();
@@ -173,3 +223,5 @@ async function main(event) {
 
 exports.main = main;
 exports.isCollectionAlreadyExistsError = isCollectionAlreadyExistsError;
+exports.formatProductId = formatProductId;
+exports.getMaxProductSequence = getMaxProductSequence;

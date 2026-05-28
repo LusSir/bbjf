@@ -19,12 +19,6 @@
       <view class="section-title">{{editingId ? '编辑商品' : '新增商品'}}</view>
 
       <view class="form-field">
-        <view class="field-label">商品编号</view>
-        <input wx:if="{{editingId}}" class="field-input" value="{{form.id}}" disabled="{{true}}" />
-        <view wx:else class="field-input readonly-value">保存后自动生成：{{nextProductId}}</view>
-      </view>
-
-      <view class="form-field">
         <view class="field-label">商品名称</view>
         <input class="field-input" value="{{form.name}}" data-field="name" bindinput="updateField" placeholder="纯棉四件套" />
       </view>
@@ -103,7 +97,7 @@
         <image wx:if="{{item.image}}" class="admin-product-image" src="{{item.image}}" mode="aspectFill" />
         <view class="admin-product-main">
           <view class="admin-product-name">{{item.name}}</view>
-          <view class="admin-product-meta">{{item.id}} · {{item.priceText}}</view>
+          <view class="admin-product-meta">{{item.priceText}} · {{item.status === 'draft' ? '未上架' : '已上架'}}</view>
         </view>
         <view class="admin-product-actions">
           <button class="mini-button" data-id="{{item.id}}" bindtap="editProduct">编辑</button>

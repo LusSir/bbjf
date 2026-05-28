@@ -15,7 +15,6 @@ Page({
     products: [],
     form: defaultForm,
     editingId: "",
-    nextProductId: "P0001",
     selectedCategoryName: productModel.getCategoryName(categories, defaultCategoryId),
     saving: false,
     uploading: false
@@ -48,10 +47,7 @@ Page({
   },
   loadProducts() {
     productsService.listProducts({ includeDraft: true }).then((products) => {
-      this.setData({
-        products,
-        nextProductId: productModel.buildNextProductId(products)
-      });
+      this.setData({ products });
     });
   },
   updateField(event) {
@@ -106,7 +102,7 @@ Page({
   uploadImage(tempPath) {
     const extMatch = tempPath.match(/\.(jpg|jpeg|png|webp)$/i);
     const ext = extMatch ? extMatch[1].toLowerCase() : "jpg";
-    const productId = this.data.form.id || this.data.nextProductId || "new-product";
+    const productId = this.data.form.id || "new-product";
     const cloudPath = `products/${productId}-${Date.now()}.${ext}`;
 
     this.setData({ uploading: true });
