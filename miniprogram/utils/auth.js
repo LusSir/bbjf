@@ -35,13 +35,24 @@ function getCachedUser() {
   return user;
 }
 
-function login() {
+function normalizeProfile(profile) {
+  const data = profile || {};
+  return {
+    nickName: String(data.nickName || "").trim(),
+    avatarUrl: String(data.avatarUrl || "").trim()
+  };
+}
+
+function login(profile) {
   if (typeof wx === "undefined" || !wx.cloud) {
     return Promise.reject(new Error("当前环境不支持云开发"));
   }
 
   return wx.cloud.callFunction({
-    name: "login"
+    name: "login",
+    data: {
+      profile: normalizeProfile(profile)
+    }
   }).then((res) => {
     const user = res && res.result && res.result.user;
     if (!user) {
@@ -74,6 +85,7 @@ module.exports = {
   USER_STORAGE_KEY,
   getCachedUser,
   login,
+  normalizeProfile,
   refreshUser,
   requireAdmin,
   setCurrentUser

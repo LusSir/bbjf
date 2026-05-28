@@ -7,11 +7,12 @@
       <view class="status-pill {{isAdmin ? 'admin' : ''}}">
         {{isAdmin ? '管理员' : '普通用户'}}
       </view>
+      <view wx:if="{{user.nickName}}" class="user-name">微信昵称：{{user.nickName}}</view>
       <view class="openid-text">OpenID：{{user.openid}}</view>
     </view>
 
     <button class="primary-button" loading="{{loading}}" bindtap="handleLogin">
-      {{user ? '刷新登录状态' : '微信登录'}}
+      {{user ? '刷新微信资料' : '授权并登录'}}
     </button>
 
     <button wx:if="{{isAdmin}}" class="secondary-button" bindtap="openAdmin">
