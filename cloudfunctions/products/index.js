@@ -66,17 +66,6 @@ function isCollectionAlreadyExistsError(error) {
     || message.includes("DATABASE_COLLECTION_ALREADY_EXIST");
 }
 
-async function ensureProductsCollection() {
-  if (!db.createCollection) return;
-  try {
-    await db.createCollection(PRODUCTS_COLLECTION);
-  } catch (error) {
-    if (!isCollectionAlreadyExistsError(error)) {
-      throw error;
-    }
-  }
-}
-
 async function listProducts(includeDraft) {
   const where = includeDraft ? {} : { status: _.neq("draft") };
   try {
@@ -116,7 +105,6 @@ async function buildNextProductId() {
 
 async function saveProduct(product, openid) {
   await assertAdmin(openid);
-  await ensureProductsCollection();
   const normalized = normalizeProduct(product, { allowEmptyId: true });
   if (!normalized.id) {
     normalized.id = await buildNextProductId();
