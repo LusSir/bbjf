@@ -17,8 +17,6 @@ Page({
   },
   onLoad(options) {
     this.setData({ editingId: options.id || "" });
-  },
-  onShow() {
     this.checkAdmin();
   },
   checkAdmin() {
