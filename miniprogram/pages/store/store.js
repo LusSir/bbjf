@@ -1,10 +1,11 @@
-const store = require("../../config/store");
 const contact = require("../../utils/contact");
 const auth = require("../../utils/auth");
+const settingsService = require("../../utils/settings-service");
+const fallbackStore = require("../../config/store");
 
 Page({
   data: {
-    store,
+    store: fallbackStore,
     user: null,
     isAdmin: false,
     faqs: [
@@ -14,6 +15,7 @@ Page({
     ]
   },
   onShow() {
+    this.loadStore();
     auth.refreshUser().then((user) => {
       this.setData({
         user,
@@ -21,17 +23,22 @@ Page({
       });
     });
   },
+  loadStore() {
+    settingsService.getStore().then((store) => {
+      this.setData({ store });
+    });
+  },
   onShareAppMessage() {
     return {
-      title: store.shareTitle,
+      title: this.data.store.shareTitle,
       path: "/pages/store/store"
     };
   },
   handleWechat() {
-    contact.openWechatQrCode();
+    contact.openWechatQrCode(this.data.store);
   },
   previewWechatQr() {
-    contact.openWechatQrCode();
+    contact.openWechatQrCode(this.data.store);
   },
   previewStorePhoto(event) {
     const current = event.currentTarget.dataset.src;
@@ -41,10 +48,10 @@ Page({
     });
   },
   handlePhone() {
-    contact.callStore();
+    contact.callStore(this.data.store);
   },
   handleLocation() {
-    contact.openStoreLocation();
+    contact.openStoreLocation(this.data.store);
   },
   handleAccountEntry() {
     if (!this.data.isAdmin) {

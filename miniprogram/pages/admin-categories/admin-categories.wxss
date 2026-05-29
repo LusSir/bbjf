@@ -1,0 +1,158 @@
+.admin-categories-page {
+  padding-bottom: 56rpx;
+}
+
+.state-card,
+.form-card,
+.category-row {
+  padding: 30rpx;
+}
+
+.state-title,
+.section-title {
+  color: #27302b;
+  font-size: 34rpx;
+  font-weight: 900;
+}
+
+.state-desc {
+  margin-top: 12rpx;
+  color: #69746e;
+  font-size: 25rpx;
+  line-height: 1.5;
+}
+
+.form-field {
+  margin-top: 22rpx;
+}
+
+.field-label {
+  margin-bottom: 10rpx;
+  color: #4c5650;
+  font-size: 25rpx;
+  font-weight: 800;
+}
+
+.field-input {
+  width: 100%;
+  min-height: 84rpx;
+  box-sizing: border-box;
+  padding: 0 22rpx;
+  border-radius: 16rpx;
+  background: #f8f7f3;
+  color: #27302b;
+  font-size: 26rpx;
+}
+
+.inline-field {
+  display: flex;
+  align-items: center;
+  gap: 18rpx;
+}
+
+.inline-field .field-label {
+  margin-bottom: 0;
+}
+
+.short-input {
+  width: 180rpx;
+}
+
+.switch-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 24rpx;
+  color: #4c5650;
+  font-size: 26rpx;
+}
+
+.form-actions {
+  display: grid;
+  grid-template-columns: 1fr 180rpx;
+  gap: 16rpx;
+  margin-top: 28rpx;
+}
+
+.primary-button,
+.secondary-button,
+.mini-button {
+  margin: 0;
+  border-radius: 16rpx;
+  font-size: 25rpx;
+  font-weight: 800;
+}
+
+.primary-button {
+  color: #ffffff;
+  background: #52796f;
+}
+
+.secondary-button,
+.mini-button {
+  color: #52796f;
+  background: #eef5ef;
+}
+
+.summary-text {
+  margin: 24rpx 4rpx 12rpx;
+  color: #7b786f;
+  font-size: 24rpx;
+}
+
+.category-row {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 16rpx;
+  align-items: center;
+  margin-top: 16rpx;
+}
+
+.category-main {
+  min-width: 0;
+}
+
+.category-name {
+  color: #27302b;
+  font-size: 29rpx;
+  font-weight: 900;
+}
+
+.category-desc {
+  margin-top: 8rpx;
+  color: #7b786f;
+  font-size: 23rpx;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.status-badge {
+  padding: 8rpx 16rpx;
+  border-radius: 999rpx;
+  color: #52796f;
+  background: #eef5ef;
+  font-size: 22rpx;
+  font-weight: 900;
+}
+
+.status-badge.disabled {
+  color: #8f817c;
+  background: #f5eee9;
+}
+
+.row-actions {
+  grid-column: 1 / 3;
+  display: flex;
+  gap: 12rpx;
+}
+
+.mini-button {
+  padding: 0 22rpx;
+  line-height: 56rpx;
+}
+
+.mini-button.danger {
+  color: #df765d;
+  background: #fff1ec;
+}

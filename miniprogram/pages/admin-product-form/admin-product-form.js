@@ -1,10 +1,7 @@
 const auth = require("../../utils/auth");
-const categories = require("../../data/categories");
 const productModel = require("../../utils/product-model");
 const productsService = require("../../utils/products-service");
-
-const sortedCategories = categories.slice().sort((a, b) => a.sort - b.sort);
-const defaultCategoryId = sortedCategories[0] ? sortedCategories[0].id : "sets";
+const settingsService = require("../../utils/settings-service");
 
 Page({
   data: {
@@ -14,9 +11,9 @@ Page({
     saving: false,
     uploading: false,
     editingId: "",
-    categories: sortedCategories,
-    selectedCategoryName: productModel.getCategoryName(sortedCategories, defaultCategoryId),
-    form: productModel.productToForm({ categoryId: defaultCategoryId, sort: 10 })
+    categories: [],
+    selectedCategoryName: "",
+    form: productModel.productToForm({ categoryId: "", sort: 10 })
   },
   onLoad(options) {
     this.setData({ editingId: options.id || "" });
@@ -27,18 +24,32 @@ Page({
   checkAdmin() {
     auth.requireAdmin()
       .then(() => {
-        this.setData({ checking: false, allowed: true });
-        if (this.data.editingId) {
-          this.loadProduct(this.data.editingId);
-        }
+        this.setData({ checking: false, allowed: true, loading: true });
+        this.loadCategories().then(() => {
+          if (this.data.editingId) {
+            this.loadProduct(this.data.editingId);
+            return;
+          }
+          this.setData({ loading: false });
+        });
       })
       .catch(() => {
         this.setData({ checking: false, allowed: false });
         wx.showToast({ title: "仅管理员可进入", icon: "none" });
       });
   },
+  loadCategories() {
+    return settingsService.listCategories().then((categories) => {
+      const defaultCategoryId = categories[0] ? categories[0].id : "";
+      const currentCategoryId = this.data.form.categoryId || defaultCategoryId;
+      this.setData({
+        categories,
+        "form.categoryId": currentCategoryId,
+        selectedCategoryName: productModel.getCategoryName(categories, currentCategoryId)
+      });
+    });
+  },
   loadProduct(id) {
-    this.setData({ loading: true });
     productsService.getProductById(id)
       .then((product) => {
         if (!product) {

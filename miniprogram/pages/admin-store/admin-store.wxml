@@ -1,0 +1,78 @@
+<view class="page admin-store-page">
+  <view wx:if="{{checking || loading}}" class="card state-card">
+    <view class="state-title">{{checking ? '正在校验权限' : '正在加载门店信息'}}</view>
+  </view>
+
+  <view wx:elif="{{!allowed}}" class="card state-card">
+    <view class="state-title">无法编辑门店信息</view>
+    <view class="state-desc">当前微信账号不是管理员。</view>
+  </view>
+
+  <view wx:else class="card form-card">
+    <view class="section-title">门店信息</view>
+
+    <view class="form-field">
+      <view class="field-label">门店名称</view>
+      <input class="field-input" value="{{form.name}}" data-field="name" bindinput="updateField" />
+    </view>
+
+    <view class="form-field">
+      <view class="field-label">门店标语</view>
+      <input class="field-input" value="{{form.slogan}}" data-field="slogan" bindinput="updateField" />
+    </view>
+
+    <view class="form-field">
+      <view class="field-label">联系电话</view>
+      <input class="field-input" type="number" value="{{form.phone}}" data-field="phone" bindinput="updateField" />
+    </view>
+
+    <view class="form-field">
+      <view class="field-label">门店地址</view>
+      <textarea class="field-textarea compact" value="{{form.address}}" data-field="address" bindinput="updateField" />
+    </view>
+
+    <view class="form-field">
+      <view class="field-label">营业时间</view>
+      <input class="field-input" value="{{form.businessHours}}" data-field="businessHours" bindinput="updateField" />
+    </view>
+
+    <view class="coord-grid">
+      <view class="form-field">
+        <view class="field-label">纬度</view>
+        <input class="field-input" type="digit" value="{{form.latitude}}" data-field="latitude" bindinput="updateField" />
+      </view>
+      <view class="form-field">
+        <view class="field-label">经度</view>
+        <input class="field-input" type="digit" value="{{form.longitude}}" data-field="longitude" bindinput="updateField" />
+      </view>
+    </view>
+
+    <view class="form-field">
+      <view class="field-label">微信二维码</view>
+      <view class="image-edit-row">
+        <image wx:if="{{form.wechatQrCode}}" class="qr-preview" src="{{form.wechatQrCode}}" mode="aspectFit" />
+        <view wx:else class="image-empty">未上传</view>
+        <button class="small-button" loading="{{uploadingQr}}" bindtap="chooseWechatQr">上传二维码</button>
+      </view>
+    </view>
+
+    <view class="form-field">
+      <view class="field-label">门店实拍</view>
+      <button class="small-button inline-button" loading="{{uploadingPhotos}}" bindtap="chooseStorePhotos">上传实拍图</button>
+      <view wx:if="{{!form.storePhotos.length}}" class="image-empty wide">还没有门店实拍图</view>
+      <view class="photo-grid">
+        <view wx:for="{{form.storePhotos}}" wx:key="*this" class="photo-item">
+          <image class="photo-preview" src="{{item}}" mode="aspectFill" />
+          <button class="tiny-button danger" data-index="{{index}}" bindtap="removeStorePhoto">删除</button>
+        </view>
+      </view>
+    </view>
+
+    <view class="form-field">
+      <view class="field-label">分享标题</view>
+      <input class="field-input" value="{{form.shareTitle}}" data-field="shareTitle" bindinput="updateField" />
+    </view>
+
+    <button class="primary-button" loading="{{saving}}" bindtap="saveStore">保存门店信息</button>
+  </view>
+</view>

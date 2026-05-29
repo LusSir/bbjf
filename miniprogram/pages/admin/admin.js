@@ -36,5 +36,11 @@ Page({
   },
   openProductManager() {
     wx.navigateTo({ url: "/pages/admin-products/admin-products" });
+  },
+  openStoreManager() {
+    wx.navigateTo({ url: "/pages/admin-store/admin-store" });
+  },
+  openCategoryManager() {
+    wx.navigateTo({ url: "/pages/admin-categories/admin-categories" });
   }
 });

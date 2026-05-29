@@ -1,23 +1,30 @@
-const store = require("../../config/store");
-const categories = require("../../data/categories");
 const contact = require("../../utils/contact");
 const productsService = require("../../utils/products-service");
+const settingsService = require("../../utils/settings-service");
+const fallbackStore = require("../../config/store");
 
 Page({
   data: {
-    store,
+    store: fallbackStore,
     categories: [],
     featuredProducts: [],
     specialProducts: []
   },
   onLoad() {
-    this.setData({
-      categories: categories.slice().sort((a, b) => a.sort - b.sort)
-    });
+    this.loadSettings();
     this.loadProducts();
   },
   onShow() {
+    this.loadSettings();
     this.loadProducts();
+  },
+  loadSettings() {
+    Promise.all([
+      settingsService.getStore(),
+      settingsService.listCategories()
+    ]).then(([store, categories]) => {
+      this.setData({ store, categories });
+    });
   },
   loadProducts() {
     productsService.listProducts().then((products) => {
@@ -29,18 +36,18 @@ Page({
   },
   onShareAppMessage() {
     return {
-      title: store.shareTitle,
+      title: this.data.store.shareTitle,
       path: "/pages/home/home"
     };
   },
   handleWechat() {
-    contact.openWechatQrCode();
+    contact.openWechatQrCode(this.data.store);
   },
   handlePhone() {
-    contact.callStore();
+    contact.callStore(this.data.store);
   },
   handleLocation() {
-    contact.openStoreLocation();
+    contact.openStoreLocation(this.data.store);
   },
   openCategory(event) {
     const id = event.currentTarget.dataset.id;

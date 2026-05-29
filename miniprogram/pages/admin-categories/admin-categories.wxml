@@ -1,0 +1,51 @@
+<view class="page admin-categories-page">
+  <view wx:if="{{checking || loading}}" class="card state-card">
+    <view class="state-title">{{checking ? '正在校验权限' : '正在加载分类'}}</view>
+  </view>
+
+  <view wx:elif="{{!allowed}}" class="card state-card">
+    <view class="state-title">无法管理分类</view>
+    <view class="state-desc">当前微信账号不是管理员。</view>
+  </view>
+
+  <view wx:else>
+    <view class="card form-card">
+      <view class="section-title">{{editing ? '编辑分类' : '新增分类'}}</view>
+      <view class="form-field">
+        <view class="field-label">分类名称</view>
+        <input class="field-input" value="{{form.name}}" data-field="name" bindinput="updateField" placeholder="如：床品四件套" />
+      </view>
+      <view class="form-field">
+        <view class="field-label">分类说明</view>
+        <input class="field-input" value="{{form.description}}" data-field="description" bindinput="updateField" placeholder="如：日常家用，多花色可选" />
+      </view>
+      <view class="form-field inline-field">
+        <view class="field-label">排序</view>
+        <input class="field-input short-input" type="number" value="{{form.sort}}" data-field="sort" bindinput="updateField" />
+      </view>
+      <label class="switch-row">
+        <text>启用分类</text>
+        <switch checked="{{form.status !== 'disabled'}}" bindchange="updateStatus" color="#52796f" />
+      </label>
+      <view class="form-actions">
+        <button class="primary-button" loading="{{saving}}" bindtap="saveCategory">保存分类</button>
+        <button wx:if="{{editing}}" class="secondary-button" bindtap="resetForm">取消编辑</button>
+      </view>
+    </view>
+
+    <view class="summary-text">共 {{categories.length}} 个分类</view>
+    <view wx:for="{{categories}}" wx:key="id" class="card category-row">
+      <view class="category-main">
+        <view class="category-name">{{item.name}}</view>
+        <view class="category-desc">{{item.description || '未填写说明'}} · 排序 {{item.sort}}</view>
+      </view>
+      <view class="status-badge {{item.status === 'disabled' ? 'disabled' : ''}}">{{item.status === 'disabled' ? '停用' : '启用'}}</view>
+      <view class="row-actions">
+        <button class="mini-button" data-id="{{item.id}}" bindtap="editCategory">编辑</button>
+        <button class="mini-button {{item.status === 'disabled' ? '' : 'danger'}}" data-id="{{item.id}}" data-status="{{item.status}}" bindtap="toggleCategory">
+          {{item.status === 'disabled' ? '启用' : '停用'}}
+        </button>
+      </view>
+    </view>
+  </view>
+</view>

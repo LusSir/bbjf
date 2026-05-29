@@ -24,6 +24,14 @@
         <view class="entry-title">商品管理</view>
         <view class="entry-desc">搜索、筛选、编辑或删除已有商品。</view>
       </view>
+      <view class="admin-entry" bindtap="openStoreManager">
+        <view class="entry-title">门店信息</view>
+        <view class="entry-desc">维护电话、地址、营业时间、微信二维码和门店实拍。</view>
+      </view>
+      <view class="admin-entry" bindtap="openCategoryManager">
+        <view class="entry-title">分类管理</view>
+        <view class="entry-desc">新增、编辑、排序和启停商品分类。</view>
+      </view>
     </view>
   </view>
 </view>

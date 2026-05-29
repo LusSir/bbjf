@@ -1,5 +1,5 @@
-const categories = require("../../data/categories");
 const productsService = require("../../utils/products-service");
+const settingsService = require("../../utils/settings-service");
 
 function getProductsByCategory(products, categoryId) {
   return products.filter((item) => item.categoryId === categoryId);
@@ -14,21 +14,28 @@ Page({
     loading: false
   },
   onLoad() {
-    const sortedCategories = categories.slice().sort((a, b) => a.sort - b.sort);
-    const selectedCategoryId = sortedCategories[0] ? sortedCategories[0].id : "";
-    this.setData({
-      categories: sortedCategories,
-      selectedCategoryId
+    this.loadCategories().then(() => {
+      this.loadProducts();
     });
-    this.loadProducts();
   },
   onShow() {
-    const storedCategoryId = wx.getStorageSync("selectedCategoryId");
-    if (storedCategoryId) {
-      wx.removeStorageSync("selectedCategoryId");
-      this.setData({ selectedCategoryId: storedCategoryId });
-    }
-    this.loadProducts();
+    this.loadCategories().then(() => {
+      const storedCategoryId = wx.getStorageSync("selectedCategoryId");
+      if (storedCategoryId) {
+        wx.removeStorageSync("selectedCategoryId");
+        this.setData({ selectedCategoryId: storedCategoryId });
+      }
+      this.loadProducts();
+    });
+  },
+  loadCategories() {
+    return settingsService.listCategories().then((categories) => {
+      const selectedCategoryId = this.data.selectedCategoryId || (categories[0] ? categories[0].id : "");
+      this.setData({
+        categories,
+        selectedCategoryId
+      });
+    });
   },
   loadProducts() {
     this.setData({ loading: true });
@@ -44,7 +51,7 @@ Page({
     this.selectCategoryById(event.currentTarget.dataset.id);
   },
   selectCategoryById(categoryId) {
-    const exists = categories.some((item) => item.id === categoryId);
+    const exists = this.data.categories.some((item) => item.id === categoryId);
     if (!exists) return;
 
     this.setData({

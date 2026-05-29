@@ -6,6 +6,8 @@
     "pages/store/store",
     "pages/login/login",
     "pages/admin/admin",
+    "pages/admin-store/admin-store",
+    "pages/admin-categories/admin-categories",
     "pages/admin-products/admin-products",
     "pages/admin-product-form/admin-product-form"
   ],

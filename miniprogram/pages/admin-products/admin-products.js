@@ -1,8 +1,8 @@
 const auth = require("../../utils/auth");
-const categories = require("../../data/categories");
 const productsService = require("../../utils/products-service");
 const adminProducts = require("../../utils/admin-products");
 const productModel = require("../../utils/product-model");
+const settingsService = require("../../utils/settings-service");
 
 Page({
   data: {
@@ -12,7 +12,7 @@ Page({
     keyword: "",
     categoryId: "all",
     status: "all",
-    categories: [{ id: "all", name: "全部分类" }].concat(categories.slice().sort((a, b) => a.sort - b.sort)),
+    categories: [{ id: "all", name: "全部分类" }],
     statusOptions: [
       { id: "all", name: "全部状态" },
       { id: "active", name: "已上架" },
@@ -30,12 +30,19 @@ Page({
     auth.requireAdmin()
       .then(() => {
         this.setData({ checking: false, allowed: true });
-        this.loadProducts();
+        this.loadCategories().then(() => this.loadProducts());
       })
       .catch(() => {
         this.setData({ checking: false, allowed: false });
         wx.showToast({ title: "仅管理员可进入", icon: "none" });
       });
+  },
+  loadCategories() {
+    return settingsService.listCategories({ includeDisabled: true }).then((categories) => {
+      this.setData({
+        categories: [{ id: "all", name: "全部分类" }].concat(categories)
+      });
+    });
   },
   loadProducts() {
     this.setData({ loading: true });
