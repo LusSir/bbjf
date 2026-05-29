@@ -2,16 +2,20 @@ const fallbackProducts = require("../data/products");
 const productModel = require("./product-model");
 
 function sortProducts(products) {
-  return products.map((item) => ({
-    ...item,
-    image: productModel.getPrimaryImage(item),
-    images: productModel.normalizeProductImages(item.images)
-  })).sort((a, b) => {
+  return products.map(normalizeProduct).sort((a, b) => {
     const left = Number(a.sort) || 999;
     const right = Number(b.sort) || 999;
     if (left !== right) return left - right;
     return String(a.name || "").localeCompare(String(b.name || ""), "zh-Hans-CN");
   });
+}
+
+function normalizeProduct(item) {
+  return {
+    ...item,
+    image: productModel.getPrimaryImage(item),
+    images: productModel.normalizeProductImages(item.images)
+  };
 }
 
 function activeOnly(products) {
@@ -47,8 +51,14 @@ function listProducts(options) {
 
 function getProductById(id) {
   return callProducts("get", { id })
-    .then((result) => result.product || fallbackProducts.find((item) => item.id === id) || null)
-    .catch(() => fallbackProducts.find((item) => item.id === id) || null);
+    .then((result) => {
+      const product = result.product || fallbackProducts.find((item) => item.id === id) || null;
+      return product ? normalizeProduct(product) : null;
+    })
+    .catch(() => {
+      const product = fallbackProducts.find((item) => item.id === id) || null;
+      return product ? normalizeProduct(product) : null;
+    });
 }
 
 function saveProduct(product) {
@@ -64,5 +74,6 @@ module.exports = {
   getProductById,
   listProducts,
   saveProduct,
+  normalizeProduct,
   sortProducts
 };

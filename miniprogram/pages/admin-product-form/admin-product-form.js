@@ -108,21 +108,22 @@ Page({
       cloudPath,
       filePath: tempPath,
       success: (res) => {
-        const images = (this.data.form.images || []).concat({
+        const nextImages = productModel.appendProductImage(this.data.form, {
           name: "",
           url: res.fileID
         });
-        const image = this.data.form.image || res.fileID;
         this.setData({
-          "form.images": images,
-          "form.image": image
+          "form.images": nextImages.images,
+          "form.image": nextImages.image
+        }, () => {
+          this.uploadImageQueue(tempPaths, index + 1);
         });
       },
       fail: () => {
         wx.showToast({ title: "图片上传失败", icon: "none" });
+        this.uploadImageQueue(tempPaths, index + 1);
       },
       complete: () => {
-        this.uploadImageQueue(tempPaths, index + 1);
       }
     });
   },

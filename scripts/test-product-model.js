@@ -43,5 +43,14 @@ assert.strictEqual(model.getCategoryName([{ id: "mats", name: "凉席" }], "unkn
 assert.strictEqual(model.buildNextProductId([{ id: "P0001" }, { id: "P0009" }]), "P0010");
 assert.strictEqual(model.getPrimaryImage({ image: "", images: [{ url: "cloud://a" }] }), "cloud://a");
 assert.strictEqual(model.getPrimaryImage({ image: "cloud://main", images: [{ url: "cloud://a" }] }), "cloud://main");
+assert.strictEqual(model.productToForm({ images: [{ url: "cloud://first" }] }).image, "cloud://first");
+assert.deepStrictEqual(
+  model.appendProductImage({ image: "", images: [{ name: "A", url: "cloud://a" }] }, { name: "B", url: "cloud://b" }),
+  { image: "cloud://a", images: [{ name: "A", url: "cloud://a" }, { name: "B", url: "cloud://b" }] }
+);
+assert.deepStrictEqual(
+  model.appendProductImage({ image: "cloud://main", images: [{ name: "A", url: "cloud://a" }] }, { name: "B", url: "cloud://b" }),
+  { image: "cloud://main", images: [{ name: "A", url: "cloud://a" }, { name: "B", url: "cloud://b" }] }
+);
 
 console.log("product model tests passed");

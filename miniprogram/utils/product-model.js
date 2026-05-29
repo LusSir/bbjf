@@ -34,6 +34,15 @@ function getPrimaryImage(product) {
   return images[0] ? images[0].url : "";
 }
 
+function appendProductImage(form, image) {
+  const current = form || {};
+  const images = normalizeProductImages(current.images).concat(normalizeProductImages([image]));
+  return {
+    image: current.image || (images[0] ? images[0].url : ""),
+    images
+  };
+}
+
 function assertProductId(id) {
   if (!id) {
     throw new Error("请填写商品编号");
@@ -84,13 +93,14 @@ function normalizeProductInput(input, options) {
 
 function productToForm(product) {
   const item = product || {};
+  const images = normalizeProductImages(item.images);
   return {
     id: item.id || "",
     categoryId: item.categoryId || "sets",
     name: item.name || "",
     priceText: item.priceText || "",
-    image: item.image || "",
-    images: normalizeProductImages(item.images),
+    image: item.image || (images[0] ? images[0].url : ""),
+    images,
     imageTone: item.imageTone || "warm",
     tagsText: (item.tags || []).join("\n"),
     highlightsText: (item.highlights || []).join("\n"),
@@ -119,6 +129,7 @@ function buildNextProductId(products) {
 }
 
 module.exports = {
+  appendProductImage,
   buildNextProductId,
   getCategoryName,
   getPrimaryImage,
