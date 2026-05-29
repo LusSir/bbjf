@@ -52,5 +52,31 @@ assert.deepStrictEqual(
   model.appendProductImage({ image: "cloud://main", images: [{ name: "A", url: "cloud://a" }] }, { name: "B", url: "cloud://b" }),
   { image: "cloud://main", images: [{ name: "A", url: "cloud://a" }, { name: "B", url: "cloud://b" }] }
 );
+assert.deepStrictEqual(
+  model.mergeProductImages(
+    { image: "", images: [{ name: "First", url: "cloud://first" }] },
+    [{ name: "Second", url: "cloud://second" }]
+  ),
+  {
+    image: "cloud://first",
+    images: [
+      { name: "First", url: "cloud://first" },
+      { name: "Second", url: "cloud://second" }
+    ]
+  }
+);
+assert.deepStrictEqual(
+  model.mergeProductImages(
+    { image: "cloud://main", images: [{ name: "First", url: "cloud://first" }] },
+    [{ name: "Second", url: "cloud://second" }, { name: "", url: "" }]
+  ),
+  {
+    image: "cloud://main",
+    images: [
+      { name: "First", url: "cloud://first" },
+      { name: "Second", url: "cloud://second" }
+    ]
+  }
+);
 
 console.log("product model tests passed");

@@ -34,13 +34,18 @@ function getPrimaryImage(product) {
   return images[0] ? images[0].url : "";
 }
 
-function appendProductImage(form, image) {
+function mergeProductImages(form, uploadedImages) {
   const current = form || {};
-  const images = normalizeProductImages(current.images).concat(normalizeProductImages([image]));
+  const images = normalizeProductImages(current.images).concat(normalizeProductImages(uploadedImages));
+  const image = normalizeImage(current.image) || (images[0] ? images[0].url : "");
   return {
-    image: current.image || (images[0] ? images[0].url : ""),
+    image,
     images
   };
+}
+
+function appendProductImage(form, image) {
+  return mergeProductImages(form, [image]);
 }
 
 function assertProductId(id) {
@@ -133,6 +138,7 @@ module.exports = {
   buildNextProductId,
   getCategoryName,
   getPrimaryImage,
+  mergeProductImages,
   normalizeProductImages,
   normalizeProductInput,
   productToForm,

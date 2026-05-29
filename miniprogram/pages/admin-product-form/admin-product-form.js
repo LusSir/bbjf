@@ -76,6 +76,10 @@ Page({
     });
   },
   chooseImage() {
+    if (this.data.uploading) {
+      wx.showToast({ title: "图片上传中", icon: "none" });
+      return;
+    }
     wx.chooseImage({
       count: 9,
       sizeType: ["compressed"],
@@ -89,39 +93,41 @@ Page({
     const paths = tempPaths || [];
     if (!paths.length) return;
     this.setData({ uploading: true });
-    this.uploadImageQueue(paths, 0);
+    const uploadBatchId = `${Date.now()}-${Math.random().toString(36).slice(2, 8)}`;
+    this.uploadImageQueue(paths, 0, [], uploadBatchId);
   },
-  uploadImageQueue(tempPaths, index) {
+  uploadImageQueue(tempPaths, index, uploadedImages, uploadBatchId) {
     if (index >= tempPaths.length) {
-      this.setData({ uploading: false });
+      const nextImages = productModel.mergeProductImages(this.data.form, uploadedImages);
+      this.setData({
+        "form.images": nextImages.images,
+        "form.image": nextImages.image,
+        uploading: false
+      });
+      if (!uploadedImages.length) return;
       wx.showToast({ title: "图片已上传", icon: "success" });
       return;
     }
 
     const tempPath = tempPaths[index];
-    const extMatch = tempPath.match(/\.(jpg|jpeg|png|webp)$/i);
+    const extMatch = tempPath.match(/\.(jpg|jpeg|png|webp)(?:\?|$)/i);
     const ext = extMatch ? extMatch[1].toLowerCase() : "jpg";
     const productId = this.data.form.id || "new-product";
-    const cloudPath = `products/${productId}-${Date.now()}-${index}.${ext}`;
+    const cloudPath = `products/${productId}-${uploadBatchId}-${index}.${ext}`;
 
     wx.cloud.uploadFile({
       cloudPath,
       filePath: tempPath,
       success: (res) => {
-        const nextImages = productModel.appendProductImage(this.data.form, {
+        uploadedImages.push({
           name: "",
           url: res.fileID
         });
-        this.setData({
-          "form.images": nextImages.images,
-          "form.image": nextImages.image
-        }, () => {
-          this.uploadImageQueue(tempPaths, index + 1);
-        });
+        this.uploadImageQueue(tempPaths, index + 1, uploadedImages, uploadBatchId);
       },
       fail: () => {
         wx.showToast({ title: "图片上传失败", icon: "none" });
-        this.uploadImageQueue(tempPaths, index + 1);
+        this.uploadImageQueue(tempPaths, index + 1, uploadedImages, uploadBatchId);
       },
       complete: () => {
       }
