@@ -1,0 +1,46 @@
+<view class="page admin-products-page">
+  <view wx:if="{{checking}}" class="card state-card">
+    <view class="state-title">正在校验权限</view>
+  </view>
+
+  <view wx:elif="{{!allowed}}" class="card state-card">
+    <view class="state-title">无法进入商品管理</view>
+    <view class="state-desc">当前微信账号不是管理员。</view>
+  </view>
+
+  <view wx:else>
+    <view class="toolbar">
+      <input class="search-input" value="{{keyword}}" bindinput="updateKeyword" placeholder="搜索商品名称" />
+      <button class="add-button" bindtap="openCreate">新增</button>
+    </view>
+
+    <view class="filter-row">
+      <picker range="{{categories}}" range-key="name" bindchange="changeCategory">
+        <view class="filter-pill">{{categoryName}}</view>
+      </picker>
+      <picker range="{{statusOptions}}" range-key="name" bindchange="changeStatus">
+        <view class="filter-pill">{{statusName}}</view>
+      </picker>
+    </view>
+
+    <view class="summary-text">共 {{visibleProducts.length}} 个商品</view>
+
+    <view wx:if="{{!visibleProducts.length}}" class="card empty-card">
+      <view class="empty-title">没有找到商品</view>
+      <view class="empty-desc">可以换个关键词，或新增一件商品。</view>
+    </view>
+
+    <view wx:for="{{visibleProducts}}" wx:key="id" class="product-row card">
+      <image wx:if="{{item.image}}" class="product-thumb" src="{{item.image}}" mode="aspectFill" />
+      <view wx:else class="product-thumb placeholder">图</view>
+      <view class="product-main">
+        <view class="product-name">{{item.name}}</view>
+        <view class="product-meta">{{item.categoryName}} · {{item.priceText}} · {{item.status === 'draft' ? '未上架' : '已上架'}}</view>
+      </view>
+      <view class="row-actions">
+        <button class="mini-button" data-id="{{item.id}}" bindtap="editProduct">编辑</button>
+        <button class="mini-button danger" data-id="{{item.id}}" bindtap="deleteProduct">删除</button>
+      </view>
+    </view>
+  </view>
+</view>

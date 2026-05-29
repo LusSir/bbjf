@@ -1,0 +1,82 @@
+<view class="page product-form-page">
+  <view wx:if="{{checking || loading}}" class="card state-card">
+    <view class="state-title">{{checking ? '正在校验权限' : '正在加载商品'}}</view>
+  </view>
+
+  <view wx:elif="{{!allowed}}" class="card state-card">
+    <view class="state-title">无法编辑商品</view>
+    <view class="state-desc">当前微信账号不是管理员。</view>
+  </view>
+
+  <view wx:else class="card form-card">
+    <view class="section-title">{{editingId ? '编辑商品' : '新增商品'}}</view>
+
+    <view class="form-field">
+      <view class="field-label">商品名称</view>
+      <input class="field-input" value="{{form.name}}" data-field="name" bindinput="updateField" placeholder="纯棉四件套" />
+    </view>
+
+    <view class="form-field">
+      <view class="field-label">商品分类</view>
+      <picker range="{{categories}}" range-key="name" bindchange="changeCategory">
+        <view class="field-input picker-value">{{selectedCategoryName}}</view>
+      </picker>
+    </view>
+
+    <view class="form-field">
+      <view class="field-label">价格文案</view>
+      <input class="field-input" value="{{form.priceText}}" data-field="priceText" bindinput="updateField" placeholder="¥199 起 / 到店咨询价" />
+    </view>
+
+    <view class="form-field">
+      <view class="field-label">商品图片</view>
+      <view class="image-row">
+        <image wx:if="{{form.image}}" class="form-image" src="{{form.image}}" mode="aspectFill" />
+        <view wx:else class="image-placeholder">未上传</view>
+        <button class="small-button" loading="{{uploading}}" bindtap="chooseImage">上传图片</button>
+      </view>
+    </view>
+
+    <view class="form-field">
+      <view class="field-label">标签</view>
+      <textarea class="field-textarea" value="{{form.tagsText}}" data-field="tagsText" bindinput="updateField" placeholder="一行一个，例如：热卖" />
+    </view>
+
+    <view class="form-field">
+      <view class="field-label">产品卖点</view>
+      <textarea class="field-textarea" value="{{form.highlightsText}}" data-field="highlightsText" bindinput="updateField" placeholder="一行一个卖点" />
+    </view>
+
+    <view class="form-field">
+      <view class="field-label">规格信息</view>
+      <textarea class="field-textarea" value="{{form.specsText}}" data-field="specsText" bindinput="updateField" placeholder="一行一个规格" />
+    </view>
+
+    <view class="form-field">
+      <view class="field-label">产品说明</view>
+      <textarea class="field-textarea" value="{{form.description}}" data-field="description" bindinput="updateField" placeholder="适合日常家用，到店可看实物" />
+    </view>
+
+    <view class="switch-grid">
+      <label class="switch-row">
+        <text>首页推荐</text>
+        <switch checked="{{form.isFeatured}}" data-field="isFeatured" bindchange="updateSwitch" color="#52796f" />
+      </label>
+      <label class="switch-row">
+        <text>特价</text>
+        <switch checked="{{form.isSpecial}}" data-field="isSpecial" bindchange="updateSwitch" color="#52796f" />
+      </label>
+      <label class="switch-row">
+        <text>新品</text>
+        <switch checked="{{form.isNew}}" data-field="isNew" bindchange="updateSwitch" color="#52796f" />
+      </label>
+    </view>
+
+    <view class="form-field inline-field">
+      <view class="field-label">排序</view>
+      <input class="field-input short-input" type="number" value="{{form.sort}}" data-field="sort" bindinput="updateField" />
+    </view>
+
+    <button class="primary-button" loading="{{saving}}" bindtap="saveProduct">保存商品</button>
+  </view>
+</view>

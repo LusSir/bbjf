@@ -1,0 +1,139 @@
+.admin-products-page {
+  padding-bottom: 56rpx;
+}
+
+.state-card,
+.empty-card {
+  padding: 34rpx;
+}
+
+.state-title,
+.empty-title {
+  color: #27302b;
+  font-size: 32rpx;
+  font-weight: 900;
+}
+
+.state-desc,
+.empty-desc {
+  margin-top: 12rpx;
+  color: #69746e;
+  font-size: 25rpx;
+  line-height: 1.5;
+}
+
+.toolbar {
+  display: grid;
+  grid-template-columns: 1fr 132rpx;
+  gap: 16rpx;
+  align-items: center;
+}
+
+.search-input {
+  height: 84rpx;
+  padding: 0 24rpx;
+  border-radius: 18rpx;
+  background: #ffffff;
+  color: #27302b;
+  font-size: 27rpx;
+  box-shadow: 0 10rpx 24rpx rgba(52, 72, 66, 0.06);
+}
+
+.add-button {
+  margin: 0;
+  border-radius: 18rpx;
+  color: #ffffff;
+  background: #52796f;
+  font-size: 26rpx;
+  font-weight: 900;
+}
+
+.filter-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16rpx;
+  margin-top: 18rpx;
+}
+
+.filter-pill {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 72rpx;
+  border-radius: 18rpx;
+  background: #eef5ef;
+  color: #52796f;
+  font-size: 25rpx;
+  font-weight: 800;
+}
+
+.summary-text {
+  margin: 22rpx 4rpx 12rpx;
+  color: #7b786f;
+  font-size: 24rpx;
+}
+
+.product-row {
+  display: flex;
+  align-items: center;
+  gap: 18rpx;
+  padding: 18rpx;
+}
+
+.product-thumb {
+  flex: 0 0 auto;
+  width: 118rpx;
+  height: 92rpx;
+  border-radius: 14rpx;
+  background: #f8f7f3;
+}
+
+.product-thumb.placeholder {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #7b786f;
+  font-size: 24rpx;
+  font-weight: 900;
+}
+
+.product-main {
+  flex: 1;
+  min-width: 0;
+}
+
+.product-name {
+  color: #27302b;
+  font-size: 28rpx;
+  font-weight: 900;
+}
+
+.product-meta {
+  margin-top: 8rpx;
+  color: #7b786f;
+  font-size: 23rpx;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.row-actions {
+  display: flex;
+  gap: 10rpx;
+}
+
+.mini-button {
+  margin: 0;
+  padding: 0 18rpx;
+  border-radius: 14rpx;
+  color: #52796f;
+  background: #eef5ef;
+  font-size: 24rpx;
+  font-weight: 800;
+  line-height: 58rpx;
+}
+
+.mini-button.danger {
+  color: #df765d;
+  background: #fff1ec;
+}

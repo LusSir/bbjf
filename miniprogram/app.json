@@ -5,7 +5,9 @@
     "pages/product-detail/product-detail",
     "pages/store/store",
     "pages/login/login",
-    "pages/admin/admin"
+    "pages/admin/admin",
+    "pages/admin-products/admin-products",
+    "pages/admin-product-form/admin-product-form"
   ],
   "window": {
     "navigationBarTitleText": "\u8d1d\u8d1d\u5bb6\u7eba",
