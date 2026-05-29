@@ -18,6 +18,22 @@ function normalizeImage(value) {
   return `/assets/products/${image}`;
 }
 
+function normalizeProductImages(images) {
+  return (Array.isArray(images) ? images : [])
+    .map((item) => ({
+      name: trimText(item && item.name),
+      url: normalizeImage(item && (item.url || item.image))
+    }))
+    .filter((item) => item.url);
+}
+
+function getPrimaryImage(product) {
+  const item = product || {};
+  if (item.image) return item.image;
+  const images = normalizeProductImages(item.images);
+  return images[0] ? images[0].url : "";
+}
+
 function assertProductId(id) {
   if (!id) {
     throw new Error("请填写商品编号");
@@ -43,12 +59,16 @@ function normalizeProductInput(input, options) {
     throw new Error("请选择商品分类");
   }
 
+  const images = normalizeProductImages(input.images);
+  const image = normalizeImage(input.image) || (images[0] ? images[0].url : "");
+
   return {
     id,
     categoryId,
     name,
     priceText: trimText(input.priceText) || "到店咨询价",
-    image: normalizeImage(input.image),
+    image,
+    images,
     imageTone: trimText(input.imageTone) || "warm",
     tags: splitLines(input.tagsText || input.tags),
     highlights: splitLines(input.highlightsText || input.highlights),
@@ -70,6 +90,7 @@ function productToForm(product) {
     name: item.name || "",
     priceText: item.priceText || "",
     image: item.image || "",
+    images: normalizeProductImages(item.images),
     imageTone: item.imageTone || "warm",
     tagsText: (item.tags || []).join("\n"),
     highlightsText: (item.highlights || []).join("\n"),
@@ -100,6 +121,8 @@ function buildNextProductId(products) {
 module.exports = {
   buildNextProductId,
   getCategoryName,
+  getPrimaryImage,
+  normalizeProductImages,
   normalizeProductInput,
   productToForm,
   splitLines

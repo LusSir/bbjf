@@ -1,7 +1,12 @@
 const fallbackProducts = require("../data/products");
+const productModel = require("./product-model");
 
 function sortProducts(products) {
-  return products.slice().sort((a, b) => {
+  return products.map((item) => ({
+    ...item,
+    image: productModel.getPrimaryImage(item),
+    images: productModel.normalizeProductImages(item.images)
+  })).sort((a, b) => {
     const left = Number(a.sort) || 999;
     const right = Number(b.sort) || 999;
     if (left !== right) return left - right;

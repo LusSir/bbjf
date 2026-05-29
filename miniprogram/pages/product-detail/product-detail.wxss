@@ -85,6 +85,35 @@
   line-height: 1.55;
 }
 
+.color-scroll {
+  margin-top: 18rpx;
+  white-space: nowrap;
+}
+
+.color-card {
+  display: inline-block;
+  width: 220rpx;
+  margin-right: 18rpx;
+  vertical-align: top;
+}
+
+.color-image {
+  width: 220rpx;
+  height: 160rpx;
+  border-radius: 16rpx;
+  background: #f8f7f3;
+}
+
+.color-name {
+  margin-top: 10rpx;
+  color: #4c5650;
+  font-size: 24rpx;
+  font-weight: 800;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
 .description {
   margin-top: 14rpx;
   color: #4c5650;

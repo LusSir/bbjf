@@ -63,35 +63,92 @@
   align-items: center;
 }
 
-.image-row {
+.image-header {
   display: flex;
   align-items: center;
+  justify-content: space-between;
   gap: 20rpx;
 }
 
-.form-image,
-.image-placeholder {
-  width: 160rpx;
-  height: 120rpx;
-  border-radius: 16rpx;
-  background: #f8f7f3;
+.image-help {
+  flex: 1;
+  color: #7b786f;
+  font-size: 24rpx;
+  line-height: 1.45;
 }
 
-.image-placeholder {
+.image-empty {
   display: flex;
   align-items: center;
   justify-content: center;
+  min-height: 116rpx;
+  margin-top: 16rpx;
+  border-radius: 16rpx;
+  background: #f8f7f3;
   color: #7b786f;
-  font-size: 24rpx;
+  font-size: 25rpx;
 }
 
-.small-button {
+.color-image-row {
+  display: flex;
+  gap: 18rpx;
+  margin-top: 16rpx;
+  padding: 16rpx;
+  border-radius: 18rpx;
+  background: #f8f7f3;
+}
+
+.form-image {
+  flex: 0 0 auto;
+  width: 160rpx;
+  height: 120rpx;
+  border-radius: 16rpx;
+  background: #ffffff;
+}
+
+.color-image-main {
+  flex: 1;
+  min-width: 0;
+}
+
+.color-name-input {
+  height: 58rpx;
+  padding: 0 16rpx;
+  border-radius: 14rpx;
+  background: #ffffff;
+  color: #27302b;
+  font-size: 25rpx;
+}
+
+.image-actions {
+  display: flex;
+  gap: 12rpx;
+  margin-top: 12rpx;
+}
+
+.small-button,
+.tiny-button {
   margin: 0;
   border-radius: 14rpx;
   color: #52796f;
   background: #eef5ef;
   font-size: 24rpx;
   font-weight: 800;
+}
+
+.tiny-button {
+  padding: 0 18rpx;
+  line-height: 54rpx;
+}
+
+.tiny-button.active {
+  color: #ffffff;
+  background: #52796f;
+}
+
+.tiny-button.danger {
+  color: #df765d;
+  background: #fff1ec;
 }
 
 .switch-grid {

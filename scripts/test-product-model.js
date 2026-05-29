@@ -7,6 +7,11 @@ const draft = model.normalizeProductInput({
   name: " 纯棉四件套 ",
   priceText: "¥299 起",
   image: "cotton-set-002.jpg",
+  images: [
+    { name: "米白小花", url: "cotton-set-002-a.jpg" },
+    { name: "浅粉格纹", url: "/assets/products/cotton-set-002-b.jpg" },
+    { name: "", url: "" }
+  ],
   tagsText: "热卖\n纯棉",
   highlightsText: "亲肤透气\n多花色可选",
   specsText: "床型：1.5m / 1.8m\n材质：纯棉",
@@ -24,6 +29,10 @@ assert.deepStrictEqual(draft.tags, ["热卖", "纯棉"]);
 assert.deepStrictEqual(draft.highlights, ["亲肤透气", "多花色可选"]);
 assert.deepStrictEqual(draft.specs, ["床型：1.5m / 1.8m", "材质：纯棉"]);
 assert.strictEqual(draft.image, "/assets/products/cotton-set-002.jpg");
+assert.deepStrictEqual(draft.images, [
+  { name: "米白小花", url: "/assets/products/cotton-set-002-a.jpg" },
+  { name: "浅粉格纹", url: "/assets/products/cotton-set-002-b.jpg" }
+]);
 assert.strictEqual(draft.sort, 20);
 assert.strictEqual(draft.status, "active");
 
@@ -32,5 +41,7 @@ assert.throws(() => model.normalizeProductInput({ id: "bad id", name: "错误编
 assert.strictEqual(model.getCategoryName([{ id: "mats", name: "凉席" }], "mats"), "凉席");
 assert.strictEqual(model.getCategoryName([{ id: "mats", name: "凉席" }], "unknown"), "未选择");
 assert.strictEqual(model.buildNextProductId([{ id: "P0001" }, { id: "P0009" }]), "P0010");
+assert.strictEqual(model.getPrimaryImage({ image: "", images: [{ url: "cloud://a" }] }), "cloud://a");
+assert.strictEqual(model.getPrimaryImage({ image: "cloud://main", images: [{ url: "cloud://a" }] }), "cloud://main");
 
 console.log("product model tests passed");

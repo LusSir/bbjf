@@ -29,11 +29,23 @@
     </view>
 
     <view class="form-field">
-      <view class="field-label">商品图片</view>
-      <view class="image-row">
-        <image wx:if="{{form.image}}" class="form-image" src="{{form.image}}" mode="aspectFill" />
-        <view wx:else class="image-placeholder">未上传</view>
+      <view class="field-label">花色图片</view>
+      <view class="image-header">
+        <view class="image-help">第一张会自动作为主图，也可手动设为主图。</view>
         <button class="small-button" loading="{{uploading}}" bindtap="chooseImage">上传图片</button>
+      </view>
+      <view wx:if="{{!form.images.length}}" class="image-empty">还没有上传花色图</view>
+      <view wx:for="{{form.images}}" wx:key="url" class="color-image-row">
+        <image class="form-image" src="{{item.url}}" mode="aspectFill" />
+        <view class="color-image-main">
+          <input class="color-name-input" value="{{item.name}}" data-index="{{index}}" bindinput="updateImageName" placeholder="花色名称，如：米白小花" />
+          <view class="image-actions">
+            <button class="tiny-button {{form.image === item.url ? 'active' : ''}}" data-index="{{index}}" bindtap="setPrimaryImage">
+              {{form.image === item.url ? '主图' : '设主图'}}
+            </button>
+            <button class="tiny-button danger" data-index="{{index}}" bindtap="removeProductImage">删除</button>
+          </view>
+        </view>
       </view>
     </view>
 

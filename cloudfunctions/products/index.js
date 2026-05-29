@@ -20,6 +20,15 @@ function listFrom(value) {
   return trimText(value).split(/\r?\n|\|/).map((item) => item.trim()).filter(Boolean);
 }
 
+function normalizeImages(images) {
+  return (Array.isArray(images) ? images : [])
+    .map((item) => ({
+      name: trimText(item && item.name),
+      url: trimText(item && (item.url || item.image))
+    }))
+    .filter((item) => item.url);
+}
+
 function normalizeProduct(input, options) {
   const allowEmptyId = Boolean(options && options.allowEmptyId);
   const product = input || {};
@@ -32,12 +41,16 @@ function normalizeProduct(input, options) {
   if (!name) throw new Error("请填写商品名称");
   if (!categoryId) throw new Error("请选择商品分类");
 
+  const images = normalizeImages(product.images);
+  const image = trimText(product.image) || (images[0] ? images[0].url : "");
+
   return {
     id,
     categoryId,
     name,
     priceText: trimText(product.priceText) || "到店咨询价",
-    image: trimText(product.image),
+    image,
+    images,
     imageTone: trimText(product.imageTone) || "warm",
     tags: listFrom(product.tags),
     highlights: listFrom(product.highlights),

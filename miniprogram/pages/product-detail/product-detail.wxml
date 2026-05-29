@@ -15,6 +15,16 @@
     <view wx:for="{{product.highlights}}" wx:key="*this" class="list-item">{{item}}</view>
   </view>
 
+  <view wx:if="{{product.images && product.images.length}}" class="section card detail-section">
+    <view class="section-title">可选花色</view>
+    <scroll-view class="color-scroll" scroll-x enable-flex>
+      <view wx:for="{{product.images}}" wx:key="url" class="color-card" data-url="{{item.url}}" bindtap="previewColorImage">
+        <image class="color-image" src="{{item.url}}" mode="aspectFill" />
+        <view class="color-name">{{item.name || '花色图'}}</view>
+      </view>
+    </scroll-view>
+  </view>
+
   <view class="section card detail-section">
     <view class="section-title">规格信息</view>
     <view wx:for="{{product.specs}}" wx:key="*this" class="list-item">{{item}}</view>

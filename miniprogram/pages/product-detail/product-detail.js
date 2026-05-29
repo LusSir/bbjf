@@ -1,5 +1,6 @@
 const store = require("../../config/store");
 const productsService = require("../../utils/products-service");
+const productModel = require("../../utils/product-model");
 
 Page({
   data: {
@@ -12,8 +13,23 @@ Page({
         return;
       }
 
+      const images = productModel.normalizeProductImages(product.images);
       wx.setNavigationBarTitle({ title: product.name });
-      this.setData({ product });
+      this.setData({
+        product: {
+          ...product,
+          image: productModel.getPrimaryImage(product),
+          images
+        }
+      });
+    });
+  },
+  previewColorImage(event) {
+    const current = event.currentTarget.dataset.url;
+    const urls = (this.data.product.images || []).map((item) => item.url);
+    wx.previewImage({
+      current,
+      urls
     });
   },
   onShareAppMessage() {

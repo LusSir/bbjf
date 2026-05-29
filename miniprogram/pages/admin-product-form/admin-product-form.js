@@ -77,34 +77,75 @@ Page({
   },
   chooseImage() {
     wx.chooseImage({
-      count: 1,
+      count: 9,
       sizeType: ["compressed"],
       sourceType: ["album", "camera"],
       success: (res) => {
-        this.uploadImage(res.tempFilePaths[0]);
+        this.uploadImages(res.tempFilePaths);
       }
     });
   },
-  uploadImage(tempPath) {
+  uploadImages(tempPaths) {
+    const paths = tempPaths || [];
+    if (!paths.length) return;
+    this.setData({ uploading: true });
+    this.uploadImageQueue(paths, 0);
+  },
+  uploadImageQueue(tempPaths, index) {
+    if (index >= tempPaths.length) {
+      this.setData({ uploading: false });
+      wx.showToast({ title: "图片已上传", icon: "success" });
+      return;
+    }
+
+    const tempPath = tempPaths[index];
     const extMatch = tempPath.match(/\.(jpg|jpeg|png|webp)$/i);
     const ext = extMatch ? extMatch[1].toLowerCase() : "jpg";
     const productId = this.data.form.id || "new-product";
-    const cloudPath = `products/${productId}-${Date.now()}.${ext}`;
+    const cloudPath = `products/${productId}-${Date.now()}-${index}.${ext}`;
 
-    this.setData({ uploading: true });
     wx.cloud.uploadFile({
       cloudPath,
       filePath: tempPath,
       success: (res) => {
-        this.setData({ "form.image": res.fileID });
-        wx.showToast({ title: "图片已上传", icon: "success" });
+        const images = (this.data.form.images || []).concat({
+          name: "",
+          url: res.fileID
+        });
+        const image = this.data.form.image || res.fileID;
+        this.setData({
+          "form.images": images,
+          "form.image": image
+        });
       },
       fail: () => {
         wx.showToast({ title: "图片上传失败", icon: "none" });
       },
       complete: () => {
-        this.setData({ uploading: false });
+        this.uploadImageQueue(tempPaths, index + 1);
       }
+    });
+  },
+  updateImageName(event) {
+    const index = Number(event.currentTarget.dataset.index);
+    this.setData({
+      [`form.images[${index}].name`]: event.detail.value
+    });
+  },
+  setPrimaryImage(event) {
+    const index = Number(event.currentTarget.dataset.index);
+    const target = this.data.form.images[index];
+    if (!target) return;
+    this.setData({ "form.image": target.url });
+  },
+  removeProductImage(event) {
+    const index = Number(event.currentTarget.dataset.index);
+    const images = (this.data.form.images || []).filter((_, itemIndex) => itemIndex !== index);
+    const currentImage = this.data.form.image;
+    const stillExists = images.some((item) => item.url === currentImage);
+    this.setData({
+      "form.images": images,
+      "form.image": stillExists ? currentImage : (images[0] ? images[0].url : "")
     });
   },
   saveProduct() {
