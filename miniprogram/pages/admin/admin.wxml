@@ -5,7 +5,7 @@
 
   <view wx:elif="{{!allowed}}" class="card state-card">
     <view class="state-title">无法进入商铺管理</view>
-    <view class="state-desc">当前微信账号还不是管理员，请先登录，或在云开发 users 集合中把该用户 role 改为 admin。</view>
+    <view class="state-desc">当前微信账号还不是管理员。请先登录，或在云开发 users 集合中把该用户 role 改为 admin。</view>
     <button class="primary-button" bindtap="openLogin">去登录</button>
   </view>
 
@@ -18,11 +18,15 @@
     <view class="admin-entry-grid">
       <view class="admin-entry primary" bindtap="openCreateProduct">
         <view class="entry-title">新增商品</view>
-        <view class="entry-desc">录入新品、上传图片、设置推荐和特价。</view>
+        <view class="entry-desc">录入新品、上传图片、维护规格、设置推荐和特价。</view>
       </view>
       <view class="admin-entry" bindtap="openProductManager">
         <view class="entry-title">商品管理</view>
         <view class="entry-desc">搜索、筛选、编辑或删除已有商品。</view>
+      </view>
+      <view class="admin-entry" bindtap="openOrderManager">
+        <view class="entry-title">订单管理</view>
+        <view class="entry-desc">查看用户预约订单，更新联系和备货状态。</view>
       </view>
       <view class="admin-entry" bindtap="openStoreManager">
         <view class="entry-title">门店信息</view>

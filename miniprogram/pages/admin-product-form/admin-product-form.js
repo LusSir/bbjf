@@ -164,6 +164,45 @@ Page({
       "form.image": stillExists ? currentImage : (images[0] ? images[0].url : "")
     });
   },
+  addSku() {
+    const skus = this.data.form.skus || [];
+    this.setData({
+      "form.skus": skus.concat({
+        id: `sku-${Date.now().toString(36)}`,
+        colorName: "",
+        image: this.data.form.image || "",
+        size: "",
+        priceText: this.data.form.priceText || "",
+        stockText: "到店确认",
+        status: "active",
+        sort: (skus.length + 1) * 10
+      })
+    });
+  },
+  updateSkuField(event) {
+    const index = Number(event.currentTarget.dataset.index);
+    const field = event.currentTarget.dataset.field;
+    this.setData({
+      [`form.skus[${index}].${field}`]: event.detail.value
+    });
+  },
+  updateSkuStatus(event) {
+    const index = Number(event.currentTarget.dataset.index);
+    this.setData({
+      [`form.skus[${index}].status`]: event.detail.value ? "active" : "disabled"
+    });
+  },
+  useSkuMainImage(event) {
+    const index = Number(event.currentTarget.dataset.index);
+    this.setData({
+      [`form.skus[${index}].image`]: this.data.form.image || ""
+    });
+  },
+  removeSku(event) {
+    const index = Number(event.currentTarget.dataset.index);
+    const skus = (this.data.form.skus || []).filter((_, itemIndex) => itemIndex !== index);
+    this.setData({ "form.skus": skus });
+  },
   saveProduct() {
     let product;
     try {

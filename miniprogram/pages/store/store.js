@@ -11,7 +11,7 @@ Page({
     faqs: [
       "支持到店看实物，花色和尺寸以门店现货为准。",
       "普通商品可微信咨询，特价商品建议尽快到店确认。",
-      "第一版小程序不支持线上支付，下单和付款请联系门店。"
+      "第一版小程序不支持线上支付，预约订单提交后门店会主动联系。"
     ]
   },
   onShow() {
@@ -54,11 +54,16 @@ Page({
     contact.openStoreLocation(this.data.store);
   },
   handleAccountEntry() {
-    if (!this.data.isAdmin) {
+    if (!this.data.user) {
       wx.navigateTo({ url: "/pages/login/login" });
       return;
     }
 
-    wx.navigateTo({ url: "/pages/admin/admin" });
+    if (this.data.isAdmin) {
+      wx.navigateTo({ url: "/pages/admin/admin" });
+      return;
+    }
+
+    wx.navigateTo({ url: "/pages/my-orders/my-orders" });
   }
 });

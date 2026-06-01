@@ -1,0 +1,100 @@
+.orders-page {
+  padding-bottom: 56rpx;
+}
+
+.page-title {
+  color: #24352e;
+  font-size: 38rpx;
+  font-weight: 900;
+}
+
+.page-desc,
+.contact-line,
+.note-line,
+.item-meta,
+.order-summary,
+.preview-line,
+.more-line {
+  margin-top: 8rpx;
+  color: #6f7a72;
+  font-size: 24rpx;
+  line-height: 1.45;
+}
+
+.state-card,
+.order-card {
+  padding: 30rpx;
+  margin-top: 20rpx;
+}
+
+.order-card:active {
+  transform: translateY(2rpx);
+}
+
+.state-title,
+.order-title {
+  color: #24352e;
+  font-size: 30rpx;
+  font-weight: 900;
+}
+
+.order-head {
+  display: flex;
+  justify-content: space-between;
+  gap: 16rpx;
+  align-items: center;
+}
+
+.status-pill {
+  padding: 8rpx 16rpx;
+  border-radius: 999rpx;
+  color: #4f7669;
+  background: #eaf3ed;
+  font-size: 22rpx;
+  font-weight: 900;
+}
+
+.order-item {
+  display: flex;
+  gap: 16rpx;
+  margin-top: 18rpx;
+  padding-top: 18rpx;
+  border-top: 1rpx solid #e5ece6;
+}
+
+.item-thumb {
+  width: 120rpx;
+  height: 96rpx;
+  border-radius: 14rpx;
+  background: #f4f6f1;
+}
+
+.item-main {
+  flex: 1;
+  min-width: 0;
+}
+
+.item-name {
+  color: #24352e;
+  font-size: 26rpx;
+  font-weight: 900;
+}
+
+.preview-line {
+  padding: 10rpx 0;
+  border-top: 1rpx solid rgba(79, 118, 105, 0.1);
+}
+
+.more-line {
+  color: #4f7669;
+  font-weight: 800;
+}
+
+.primary-button {
+  margin-top: 24rpx;
+  border-radius: 16rpx;
+  color: #ffffff;
+  background: #4f7669;
+  font-size: 27rpx;
+  font-weight: 800;
+}

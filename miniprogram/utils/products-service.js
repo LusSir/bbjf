@@ -14,7 +14,8 @@ function normalizeProduct(item) {
   return {
     ...item,
     image: productModel.getPrimaryImage(item),
-    images: productModel.normalizeProductImages(item.images)
+    images: productModel.normalizeProductImages(item.images),
+    skus: productModel.normalizeProductSkus(item.skus, item)
   };
 }
 

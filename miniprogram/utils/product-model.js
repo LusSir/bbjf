@@ -48,6 +48,68 @@ function appendProductImage(form, image) {
   return mergeProductImages(form, [image]);
 }
 
+function normalizeSku(input, index, product) {
+  const sku = input || {};
+  const owner = product || {};
+  return {
+    id: trimText(sku.id) || `sku-${index + 1}`,
+    colorName: trimText(sku.colorName || sku.name) || "默认规格",
+    image: normalizeImage(sku.image) || getPrimaryImage(owner),
+    size: trimText(sku.size),
+    priceText: trimText(sku.priceText) || trimText(owner.priceText) || "到店咨询价",
+    stockText: trimText(sku.stockText) || "到店确认",
+    status: sku.status === "disabled" ? "disabled" : "active",
+    sort: Number(sku.sort) || (index + 1) * 10
+  };
+}
+
+function normalizeProductSkus(skus, product) {
+  const owner = product || {};
+  const normalized = (Array.isArray(skus) ? skus : [])
+    .map((item, index) => normalizeSku(item, index, owner))
+    .filter((item) => item.id && item.colorName)
+    .sort((a, b) => {
+      if (a.sort !== b.sort) return a.sort - b.sort;
+      return a.colorName.localeCompare(b.colorName, "zh-Hans-CN");
+    });
+
+  if (normalized.length) return normalized;
+
+  const images = normalizeProductImages(owner.images);
+  const firstImage = images[0] || null;
+  return [
+    {
+      id: "default",
+      colorName: firstImage && firstImage.name ? firstImage.name : "默认规格",
+      image: firstImage ? firstImage.url : getPrimaryImage(owner),
+      size: "",
+      priceText: trimText(owner.priceText) || "到店咨询价",
+      stockText: "到店确认",
+      status: "active",
+      sort: 10
+    }
+  ];
+}
+
+function getActiveProductSkus(product) {
+  return normalizeProductSkus(product && product.skus, product).filter((item) => item.status !== "disabled");
+}
+
+function getDefaultSku(product) {
+  const activeSkus = getActiveProductSkus(product);
+  return activeSkus[0] || null;
+}
+
+function normalizeProductForCart(product) {
+  const item = product || {};
+  const image = getPrimaryImage(item);
+  return Object.assign({}, item, {
+    image,
+    images: normalizeProductImages(item.images),
+    skus: normalizeProductSkus(item.skus, Object.assign({}, item, { image }))
+  });
+}
+
 function assertProductId(id) {
   if (!id) {
     throw new Error("请填写商品编号");
@@ -75,6 +137,11 @@ function normalizeProductInput(input, options) {
 
   const images = normalizeProductImages(input.images);
   const image = normalizeImage(input.image) || (images[0] ? images[0].url : "");
+  const baseProduct = Object.assign({}, input, {
+    image,
+    images,
+    priceText: trimText(input.priceText) || "到店咨询价"
+  });
 
   return {
     id,
@@ -83,6 +150,7 @@ function normalizeProductInput(input, options) {
     priceText: trimText(input.priceText) || "到店咨询价",
     image,
     images,
+    skus: normalizeProductSkus(input.skus, baseProduct),
     imageTone: trimText(input.imageTone) || "warm",
     tags: splitLines(input.tagsText || input.tags),
     highlights: splitLines(input.highlightsText || input.highlights),
@@ -99,13 +167,15 @@ function normalizeProductInput(input, options) {
 function productToForm(product) {
   const item = product || {};
   const images = normalizeProductImages(item.images);
+  const image = item.image || (images[0] ? images[0].url : "");
   return {
     id: item.id || "",
     categoryId: item.categoryId || "sets",
     name: item.name || "",
     priceText: item.priceText || "",
-    image: item.image || (images[0] ? images[0].url : ""),
+    image,
     images,
+    skus: normalizeProductSkus(item.skus, Object.assign({}, item, { image, images })),
     imageTone: item.imageTone || "warm",
     tagsText: (item.tags || []).join("\n"),
     highlightsText: (item.highlights || []).join("\n"),
@@ -137,10 +207,14 @@ module.exports = {
   appendProductImage,
   buildNextProductId,
   getCategoryName,
+  getActiveProductSkus,
+  getDefaultSku,
   getPrimaryImage,
   mergeProductImages,
   normalizeProductImages,
   normalizeProductInput,
+  normalizeProductForCart,
+  normalizeProductSkus,
   productToForm,
   splitLines
 };

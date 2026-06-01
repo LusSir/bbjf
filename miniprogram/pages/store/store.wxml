@@ -21,10 +21,10 @@
 
   <view class="account-entry card" bindtap="handleAccountEntry">
     <view>
-      <view class="account-title">{{isAdmin ? '商铺管理' : '管理员登录'}}</view>
-      <view class="account-desc">{{isAdmin ? '管理商品、门店信息和后续功能' : '管理员登录后可进入商铺管理'}}</view>
+      <view class="account-title">{{isAdmin ? '商铺管理' : (user ? '我的订单' : '登录 / 我的订单')}}</view>
+      <view class="account-desc">{{isAdmin ? '管理商品、订单、门店信息和分类' : (user ? '查看已提交的预约订单' : '登录后可提交订单并查看订单状态')}}</view>
     </view>
-    <view class="account-badge {{isAdmin ? 'admin' : ''}}">{{isAdmin ? '进入' : '登录'}}</view>
+    <view class="account-badge {{isAdmin ? 'admin' : ''}}">{{isAdmin ? '进入' : (user ? '查看' : '登录')}}</view>
   </view>
 
   <view class="section card info-card">

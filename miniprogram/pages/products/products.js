@@ -1,8 +1,23 @@
 const productsService = require("../../utils/products-service");
 const settingsService = require("../../utils/settings-service");
 
-function getProductsByCategory(products, categoryId) {
-  return products.filter((item) => item.categoryId === categoryId);
+function getProductsByCategory(products, categoryId, keyword) {
+  const searchText = String(keyword || "").trim().toLowerCase();
+  return products.filter((item) => {
+    const categoryMatched = item.categoryId === categoryId;
+    if (!categoryMatched) return false;
+    if (!searchText) return true;
+
+    const haystack = [
+      item.name,
+      item.priceText,
+      (item.tags || []).join(" "),
+      (item.highlights || []).join(" "),
+      (item.skus || []).map((sku) => `${sku.colorName} ${sku.size} ${sku.stockText}`).join(" ")
+    ].join(" ").toLowerCase();
+
+    return haystack.indexOf(searchText) >= 0;
+  });
 }
 
 Page({
@@ -11,6 +26,7 @@ Page({
     products: [],
     selectedCategoryId: "",
     visibleProducts: [],
+    searchKeyword: "",
     loading: false
   },
   onLoad() {
@@ -42,9 +58,22 @@ Page({
     productsService.listProducts().then((products) => {
       this.setData({
         products,
-        visibleProducts: getProductsByCategory(products, this.data.selectedCategoryId),
+        visibleProducts: getProductsByCategory(products, this.data.selectedCategoryId, this.data.searchKeyword),
         loading: false
       });
+    });
+  },
+  updateSearch(event) {
+    const searchKeyword = event.detail.value;
+    this.setData({
+      searchKeyword,
+      visibleProducts: getProductsByCategory(this.data.products, this.data.selectedCategoryId, searchKeyword)
+    });
+  },
+  clearSearch() {
+    this.setData({
+      searchKeyword: "",
+      visibleProducts: getProductsByCategory(this.data.products, this.data.selectedCategoryId, "")
     });
   },
   selectCategory(event) {
@@ -56,7 +85,7 @@ Page({
 
     this.setData({
       selectedCategoryId: categoryId,
-      visibleProducts: getProductsByCategory(this.data.products, categoryId)
+      visibleProducts: getProductsByCategory(this.data.products, categoryId, this.data.searchKeyword)
     });
   }
 });

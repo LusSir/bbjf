@@ -1,0 +1,66 @@
+<view class="page order-detail-page">
+  <view wx:if="{{loading}}" class="card state-card">
+    <view class="state-title">正在加载订单</view>
+  </view>
+
+  <view wx:elif="{{!order}}" class="card state-card">
+    <view class="state-title">订单不存在</view>
+  </view>
+
+  <view wx:else>
+    <view class="card detail-card">
+      <view class="detail-head">
+        <view>
+          <view class="detail-title">订单详情</view>
+          <view class="detail-meta">共 {{order.itemCount}} 类 / {{order.totalQuantity}} 件商品</view>
+        </view>
+        <view class="status-pill">{{order.statusName}}</view>
+      </view>
+    </view>
+
+    <view class="card detail-card">
+      <view class="section-title">联系方式</view>
+      <view class="info-row">
+        <view class="info-label">联系人</view>
+        <view class="info-value">{{order.contactName}}</view>
+      </view>
+      <view class="info-row">
+        <view class="info-label">手机号</view>
+        <view class="info-value">{{order.contactPhone}}</view>
+      </view>
+      <view wx:if="{{order.note}}" class="note-block">客户备注：{{order.note}}</view>
+      <view wx:if="{{order.adminNote}}" class="note-block">门店备注：{{order.adminNote}}</view>
+    </view>
+
+    <view class="card detail-card">
+      <view class="section-title">商品明细</view>
+      <view wx:for="{{order.items}}" wx:for-item="orderItem" wx:key="skuId" class="detail-item">
+        <image class="item-thumb" src="{{orderItem.skuSnapshot.image || orderItem.productSnapshot.image}}" mode="aspectFill" />
+        <view class="item-main">
+          <view class="item-name">{{orderItem.productSnapshot.name}}</view>
+          <view class="item-meta">花色：{{orderItem.skuSnapshot.colorName || '默认规格'}}</view>
+          <view wx:if="{{orderItem.skuSnapshot.size}}" class="item-meta">尺寸：{{orderItem.skuSnapshot.size}}</view>
+          <view class="item-meta">价格：{{orderItem.skuSnapshot.priceText || orderItem.productSnapshot.priceText}}</view>
+          <view wx:if="{{orderItem.skuSnapshot.stockText}}" class="item-meta">库存：{{orderItem.skuSnapshot.stockText}}</view>
+          <view class="quantity-pill">x{{orderItem.quantity}}</view>
+        </view>
+      </view>
+    </view>
+
+    <view wx:if="{{isAdminMode}}" class="card detail-card">
+      <view class="section-title">跟进状态</view>
+      <view class="status-actions">
+        <button
+          wx:for="{{statusOptions}}"
+          wx:key="id"
+          class="mini-button {{order.status === item.id ? 'active' : ''}}"
+          data-status="{{item.id}}"
+          loading="{{updating && order.status !== item.id}}"
+          bindtap="updateStatus"
+        >
+          {{item.name}}
+        </button>
+      </view>
+    </view>
+  </view>
+</view>

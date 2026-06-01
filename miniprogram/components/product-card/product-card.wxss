@@ -3,19 +3,23 @@
   transition: transform 0.18s ease;
 }
 
+.product-card:active {
+  transform: translateY(2rpx);
+}
+
 .product-cover {
   position: relative;
-  height: 188rpx;
+  height: 196rpx;
   overflow: hidden;
 }
 
-.tone-warm { background: linear-gradient(135deg, #f8d7c8, #e9efe7); }
-.tone-deep { background: linear-gradient(135deg, #dfe9df, #86a99d); }
-.tone-soft { background: linear-gradient(135deg, #f8e3de, #f3b7a6); }
-.tone-rose { background: linear-gradient(135deg, #f7d8d0, #d99b9a); }
-.tone-green { background: linear-gradient(135deg, #e5efe5, #91b3a7); }
-.tone-red { background: linear-gradient(135deg, #f6c9bd, #d77768); }
-.tone-gold { background: linear-gradient(135deg, #f8e7bd, #f2b56f); }
+.tone-warm { background: linear-gradient(135deg, #f5ddd1, #e7efe7); }
+.tone-deep { background: linear-gradient(135deg, #dfe8dc, #7fa396); }
+.tone-soft { background: linear-gradient(135deg, #f7e4dd, #e9b9a9); }
+.tone-rose { background: linear-gradient(135deg, #f4d9d3, #c99392); }
+.tone-green { background: linear-gradient(135deg, #e2ede2, #8ea99d); }
+.tone-red { background: linear-gradient(135deg, #f3cbc0, #cc7567); }
+.tone-gold { background: linear-gradient(135deg, #f5e4bd, #e4b06f); }
 
 .product-cover::after {
   content: "";
@@ -25,7 +29,7 @@
   width: 126rpx;
   height: 126rpx;
   border-radius: 50%;
-  background: rgba(255, 255, 255, 0.36);
+  background: rgba(255, 255, 255, 0.34);
 }
 
 .product-image {
@@ -46,8 +50,8 @@
   z-index: 1;
   padding: 6rpx 14rpx;
   border-radius: 999rpx;
-  background: rgba(255, 255, 255, 0.78);
-  color: #52796f;
+  background: rgba(255, 255, 255, 0.84);
+  color: #4f7669;
   font-size: 22rpx;
   font-weight: 800;
 }
@@ -57,14 +61,14 @@
 }
 
 .product-name {
-  color: #27302b;
+  color: #26302a;
   font-size: 28rpx;
   font-weight: 800;
 }
 
 .product-highlights {
   margin-top: 8rpx;
-  color: #7b786f;
+  color: #6f7a72;
   font-size: 22rpx;
   white-space: nowrap;
   overflow: hidden;
@@ -76,13 +80,20 @@
   margin-top: 14rpx;
   padding: 6rpx 12rpx;
   border-radius: 999rpx;
-  background: #fff1ec;
-  color: #df765d;
+  background: #fff0eb;
+  color: #d96f57;
   font-size: 26rpx;
   font-weight: 800;
 }
 
 .product-price.special {
   background: #fff4d8;
-  color: #c9792e;
+  color: #b86f26;
+}
+
+.product-stock {
+  margin-top: 8rpx;
+  color: #7c877f;
+  font-size: 22rpx;
+  line-height: 1.3;
 }

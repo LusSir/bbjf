@@ -1,0 +1,40 @@
+<view class="page cart-page safe-bottom">
+  <view class="cart-header">
+    <view>
+      <view class="page-title">购物车</view>
+      <view class="page-desc">共 {{count}} 件商品，提交后门店会主动联系确认。</view>
+    </view>
+    <button class="link-button" bindtap="openMyOrders">我的订单</button>
+  </view>
+
+  <view wx:if="{{!items.length}}" class="card empty-card">
+    <view class="empty-title">购物车还是空的</view>
+    <view class="empty-desc">先去产品页选择喜欢的床品和规格。</view>
+    <button class="primary-button" bindtap="openProducts">去选产品</button>
+  </view>
+
+  <view wx:else>
+    <view wx:for="{{items}}" wx:key="key" class="card cart-row">
+      <image class="cart-thumb" src="{{item.skuSnapshot.image || item.productSnapshot.image}}" mode="aspectFill" />
+      <view class="cart-main">
+        <view class="cart-name">{{item.productSnapshot.name}}</view>
+        <view class="cart-meta">{{item.skuSnapshot.colorName}} {{item.skuSnapshot.size}}</view>
+        <view class="cart-meta">{{item.skuSnapshot.priceText || item.productSnapshot.priceText}} · {{item.skuSnapshot.stockText}}</view>
+        <view class="quantity-row">
+          <button class="qty-button" data-key="{{item.key}}" bindtap="decreaseQuantity">-</button>
+          <input class="qty-input" type="number" value="{{item.quantity}}" data-key="{{item.key}}" bindblur="updateQuantity" />
+          <button class="qty-button" data-key="{{item.key}}" bindtap="increaseQuantity">+</button>
+          <button class="remove-button" data-key="{{item.key}}" bindtap="removeItem">删除</button>
+        </view>
+      </view>
+    </view>
+
+    <view class="card submit-card">
+      <view class="section-title">联系方式</view>
+      <input class="field-input" value="{{contactName}}" data-field="contactName" bindinput="updateField" placeholder="联系人姓名" />
+      <input class="field-input" type="number" value="{{contactPhone}}" data-field="contactPhone" bindinput="updateField" placeholder="手机号" />
+      <textarea class="field-textarea" value="{{note}}" data-field="note" bindinput="updateField" placeholder="备注：如希望确认的花色、尺寸、到店时间" />
+      <button class="primary-button" loading="{{submitting}}" bindtap="submitOrder">提交预约订单</button>
+    </view>
+  </view>
+</view>

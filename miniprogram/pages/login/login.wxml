@@ -1,7 +1,7 @@
 <view class="page login-page">
   <view class="login-card card">
     <view class="login-title">贝贝家纺</view>
-    <view class="login-desc">登录后可识别管理员身份，管理员可进入商铺管理。</view>
+    <view class="login-desc">登录后可提交预约订单、查看我的订单；管理员会额外显示商铺管理入口。</view>
 
     <view wx:if="{{user}}" class="user-panel">
       <view class="status-pill {{isAdmin ? 'admin' : ''}}">
@@ -13,6 +13,10 @@
 
     <button class="primary-button" loading="{{loading}}" bindtap="handleLogin">
       {{user ? '刷新微信资料' : '授权并登录'}}
+    </button>
+
+    <button wx:if="{{user}}" class="secondary-button" bindtap="openMyOrders">
+      查看我的订单
     </button>
 
     <button wx:if="{{isAdmin}}" class="secondary-button" bindtap="openAdmin">

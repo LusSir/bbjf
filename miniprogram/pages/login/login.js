@@ -41,7 +41,7 @@ Page({
 
     return new Promise((resolve, reject) => {
       wx.getUserProfile({
-        desc: "用于管理员识别和门店管理",
+        desc: "用于展示订单和识别管理员身份",
         success: (res) => resolve(res.userInfo || {}),
         fail: reject
       });
@@ -54,5 +54,13 @@ Page({
     }
 
     wx.navigateTo({ url: "/pages/admin/admin" });
+  },
+  openMyOrders() {
+    if (!this.data.user) {
+      wx.showToast({ title: "请先登录", icon: "none" });
+      return;
+    }
+
+    wx.navigateTo({ url: "/pages/my-orders/my-orders" });
   }
 });

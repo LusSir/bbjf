@@ -1,0 +1,146 @@
+.order-detail-page {
+  padding-bottom: 56rpx;
+}
+
+.state-card,
+.detail-card {
+  padding: 30rpx;
+}
+
+.detail-card {
+  margin-bottom: 20rpx;
+}
+
+.state-title,
+.detail-title,
+.section-title {
+  color: #26302a;
+  font-weight: 900;
+}
+
+.state-title,
+.detail-title {
+  font-size: 32rpx;
+}
+
+.detail-head,
+.info-row,
+.detail-item {
+  display: flex;
+}
+
+.detail-head,
+.info-row {
+  align-items: center;
+  justify-content: space-between;
+  gap: 20rpx;
+}
+
+.detail-meta,
+.info-label,
+.item-meta,
+.note-block {
+  color: #6f7a72;
+  font-size: 24rpx;
+  line-height: 1.55;
+}
+
+.status-pill,
+.quantity-pill {
+  flex: 0 0 auto;
+  border-radius: 999rpx;
+  font-weight: 900;
+}
+
+.status-pill {
+  padding: 10rpx 18rpx;
+  background: #e8f0e9;
+  color: #4f7669;
+  font-size: 24rpx;
+}
+
+.section-title {
+  margin-bottom: 18rpx;
+  font-size: 28rpx;
+}
+
+.info-row {
+  min-height: 56rpx;
+}
+
+.info-value {
+  color: #26302a;
+  font-size: 26rpx;
+  font-weight: 800;
+}
+
+.note-block {
+  margin-top: 14rpx;
+  padding: 18rpx;
+  border-radius: 16rpx;
+  background: #f7f4ef;
+}
+
+.detail-item {
+  gap: 18rpx;
+  padding: 18rpx 0;
+  border-top: 1rpx solid rgba(79, 118, 105, 0.12);
+}
+
+.detail-item:first-of-type {
+  border-top: 0;
+}
+
+.item-thumb {
+  flex: 0 0 auto;
+  width: 132rpx;
+  height: 132rpx;
+  border-radius: 18rpx;
+  background: #f4f6f1;
+}
+
+.item-main {
+  position: relative;
+  flex: 1;
+  min-width: 0;
+  padding-right: 76rpx;
+}
+
+.item-name {
+  color: #26302a;
+  font-size: 28rpx;
+  font-weight: 900;
+  line-height: 1.35;
+}
+
+.quantity-pill {
+  position: absolute;
+  top: 0;
+  right: 0;
+  padding: 6rpx 14rpx;
+  background: #fff0eb;
+  color: #d96f57;
+  font-size: 24rpx;
+}
+
+.status-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12rpx;
+}
+
+.mini-button {
+  margin: 0;
+  padding: 0 18rpx;
+  border-radius: 14rpx;
+  background: #e8f0e9;
+  color: #4f7669;
+  font-size: 24rpx;
+  font-weight: 800;
+  line-height: 60rpx;
+}
+
+.mini-button.active {
+  background: #4f7669;
+  color: #ffffff;
+}

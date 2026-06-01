@@ -2,46 +2,58 @@
 
 ## 当前目标
 
-- 完善门店信息管理和分类管理功能。
+- 将当前“商品展示 + 联系门店 + 后台维护”升级为“通用登录 + SKU 规格 + 购物车 + 预约订单 + 我的订单 + 订单详情 + 管理员订单管理”版本。
 
 ## 成功标准
 
-- 管理员可维护门店名称、标语、电话、地址、营业时间、经纬度、微信二维码和门店实拍图。
-- 管理员可新增、编辑、排序、启用/停用商品分类。
-- 首页、产品页、门店页、商品管理和商品表单优先读取云端门店/分类配置。
-- 云端配置不可用时继续回退到本地默认配置。
+- 登录对普通用户开放，管理员仅额外显示商铺管理入口。
+- 底部 Tab 包含 `首页 / 产品 / 购物车 / 门店`。
+- 商品详情可选择规格并加入购物车，老商品无 SKU 时自动生成默认规格。
+- 商品后台可维护 SKU 的花色、尺寸、图片、价格文案、库存说明、启用状态和排序。
+- 用户可在购物车提交预约订单，并在我的订单查看状态。
+- 订单列表只展示摘要，大订单进入详情页查看完整商品明细。
+- 管理员可查看全部订单，按状态筛选并在详情页更新跟进状态。
+- 完成模型测试、页面脚本检查和 JSON 校验。
 
 ## 已完成
 
-- 已新增设计记录与实施计划文档。
-- 已新增 `settings` 云函数，支持门店配置和分类配置。
-- 已新增 `settings-model`、`settings-service`。
-- 已新增门店信息管理页与分类管理页。
-- 已将首页、产品页、门店页、商品管理和商品表单接入动态配置。
+- 新增 `cart-model`、`cart-service`、`order-model`、`orders-service`。
+- 新增 `orders` 云函数，支持创建订单、我的订单、管理员订单、订单详情和状态更新。
+- 新增购物车、我的订单、订单详情、管理员订单页面。
+- 商品模型和商品云函数已支持 `skus`。
+- 商品详情已接入 SKU 选择、数量和加入购物车。
+- 商品管理表单已增加 SKU 编辑区。
+- 产品页已增加搜索入口，商品卡片展示默认规格价格和库存说明。
+- 登录页和门店页已改为普通用户入口，管理员入口按角色显示。
+- 我的订单和管理员订单列表已改为摘要展示，避免大订单列表过长。
 
 ## 正在进行
 
-- 运行最终验证并准备提交推送。
+- 准备最终验证、提交和推送。
 
 ## 下一步
 
-- 运行完整脚本测试、`git diff --check`，然后提交推送。
+- 在微信开发者工具上传并部署 `orders` 云函数。
+- 在云开发数据库确认或等待自动创建 `orders` 集合。
+- 在模拟器手动验收游客加车、登录提交、我的订单、订单详情和管理员改状态。
 
 ## 验证记录
 
-- 通过：`node scripts/test-settings-model.js`
+- 通过：`node scripts/test-cart-model.js`
+- 通过：`node scripts/test-order-model.js`
+- 通过：`node scripts/test-order-view-model.js`
 - 通过：`node scripts/test-product-model.js`
-- 通过：`node scripts/test-admin-products.js`
-- 通过：`node scripts/test-cloud-errors.js`
-- 通过：`node scripts/test-role.js`
-- 通过：`node scripts/test-user-profile.js`
-- 通过：`node --check cloudfunctions/settings/index.js`
-- 通过：`node --check` 多个新增/修改前端 JS 文件
+- 通过：`node -e "JSON.parse(...app.json); JSON.parse(...orders/package.json)"`
+- 通过：核心 utils、页面 JS 和云函数 `node --check`
+- 通过：`git diff --check`
 
 ## 阻塞与待确认
 
-- 无。
+- 未在微信开发者工具中做真实 `wx.cloud.callFunction`、`wx.chooseImage`、`wx.cloud.uploadFile` 手动验收。
+- `orders` 云函数需要在开发者工具里上传部署后，小程序端才能调用。
 
 ## 交接摘要
 
-- 本次新增 `settings` 云函数，代码推送后需要在微信开发者工具中上传并部署该云函数。
+- 这是预约订单能力，不包含在线支付。
+- 订单保存用户 OpenID、联系方式、备注、商品/SKU 快照、状态和更新时间。
+- SKU 停用后不允许提交新订单，历史订单仍显示提交时快照。

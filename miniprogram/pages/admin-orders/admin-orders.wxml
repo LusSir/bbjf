@@ -1,0 +1,42 @@
+<view class="page admin-orders-page">
+  <view wx:if="{{checking}}" class="card state-card">
+    <view class="state-title">正在校验权限</view>
+  </view>
+
+  <view wx:elif="{{!allowed}}" class="card state-card">
+    <view class="state-title">无法进入订单管理</view>
+    <view class="state-desc">当前微信账号不是管理员。</view>
+  </view>
+
+  <view wx:else>
+    <view class="toolbar">
+      <picker range="{{statusOptions}}" range-key="name" bindchange="changeStatusFilter">
+        <view class="filter-pill">{{statusName}}</view>
+      </picker>
+      <view class="summary-text">共 {{orders.length}} 个订单</view>
+    </view>
+
+    <view wx:if="{{loading}}" class="card state-card">
+      <view class="state-title">正在加载订单</view>
+    </view>
+
+    <view wx:elif="{{!orders.length}}" class="card state-card">
+      <view class="state-title">暂无订单</view>
+      <view class="state-desc">用户提交预约订单后会显示在这里。</view>
+    </view>
+
+    <view wx:else>
+      <view wx:for="{{orders}}" wx:key="_id" class="card order-card" data-id="{{item._id}}" bindtap="openOrderDetail">
+        <view class="order-head">
+          <view>
+            <view class="order-title">{{item.contactName}} · {{item.contactPhone}}</view>
+            <view class="order-meta">{{item.statusName}} · {{item.itemCount}} 类 / {{item.totalQuantity}} 件商品</view>
+          </view>
+        </view>
+        <view wx:if="{{item.note}}" class="note-line">客户备注：{{item.note}}</view>
+        <view wx:for="{{item.previewItems}}" wx:for-item="orderItem" wx:key="skuId" class="preview-line">{{orderItem.summaryText}}</view>
+        <view wx:if="{{item.hiddenItemCount}}" class="more-line">还有 {{item.hiddenItemCount}} 类商品，点击查看详情</view>
+      </view>
+    </view>
+  </view>
+</view>

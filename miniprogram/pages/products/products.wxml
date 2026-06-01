@@ -12,15 +12,22 @@
       </view>
     </scroll-view>
 
-    <scroll-view class="product-content" scroll-y>
-      <view wx:if="{{visibleProducts.length}}" class="product-grid">
-        <product-card wx:for="{{visibleProducts}}" wx:key="id" product="{{item}}" />
+    <view class="product-content">
+      <view class="search-bar">
+        <input class="search-input" value="{{searchKeyword}}" bindinput="updateSearch" placeholder="搜索商品、花色、尺寸" />
+        <button wx:if="{{searchKeyword}}" class="search-clear" bindtap="clearSearch">清空</button>
       </view>
 
-      <view wx:else class="empty card">
-        <view class="empty-title">商品正在整理中</view>
-        <view class="empty-desc">该分类商品正在整理中，可先微信咨询或到店看看。</view>
-      </view>
-    </scroll-view>
+      <scroll-view class="product-scroll" scroll-y>
+        <view wx:if="{{visibleProducts.length}}" class="product-grid">
+          <product-card wx:for="{{visibleProducts}}" wx:key="id" product="{{item}}" />
+        </view>
+
+        <view wx:else class="empty card">
+          <view class="empty-title">商品正在整理中</view>
+          <view class="empty-desc">可以换个关键词，或先微信咨询、到店看看。</view>
+        </view>
+      </scroll-view>
+    </view>
   </view>
 </view>

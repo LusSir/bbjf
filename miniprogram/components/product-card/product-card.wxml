@@ -6,6 +6,7 @@
   <view class="product-info">
     <view class="product-name">{{product.name}}</view>
     <view class="product-highlights">{{product.highlights[0]}}</view>
-    <view class="product-price {{product.priceType === 'special' ? 'special' : ''}}">{{product.priceText}}</view>
+    <view class="product-price {{product.priceType === 'special' ? 'special' : ''}}">{{displaySku.priceText || product.priceText}}</view>
+    <view wx:if="{{displaySku.stockText}}" class="product-stock">{{displaySku.stockText}}</view>
   </view>
 </view>

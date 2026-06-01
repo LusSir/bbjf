@@ -29,6 +29,46 @@ function normalizeImages(images) {
     .filter((item) => item.url);
 }
 
+function normalizeSkus(skus, product) {
+  const owner = product || {};
+  const normalized = (Array.isArray(skus) ? skus : [])
+    .map((item, index) => {
+      const sku = item || {};
+      return {
+        id: trimText(sku.id) || `sku-${index + 1}`,
+        colorName: trimText(sku.colorName || sku.name) || "默认规格",
+        image: trimText(sku.image) || trimText(owner.image),
+        size: trimText(sku.size),
+        priceText: trimText(sku.priceText) || trimText(owner.priceText) || "到店咨询价",
+        stockText: trimText(sku.stockText) || "到店确认",
+        status: sku.status === "disabled" ? "disabled" : "active",
+        sort: Number(sku.sort) || (index + 1) * 10
+      };
+    })
+    .filter((item) => item.id && item.colorName)
+    .sort((a, b) => {
+      if (a.sort !== b.sort) return a.sort - b.sort;
+      return a.colorName.localeCompare(b.colorName, "zh-Hans-CN");
+    });
+
+  if (normalized.length) return normalized;
+
+  const images = normalizeImages(owner.images);
+  const firstImage = images[0] || null;
+  return [
+    {
+      id: "default",
+      colorName: firstImage && firstImage.name ? firstImage.name : "默认规格",
+      image: firstImage ? firstImage.url : trimText(owner.image),
+      size: "",
+      priceText: trimText(owner.priceText) || "到店咨询价",
+      stockText: "到店确认",
+      status: "active",
+      sort: 10
+    }
+  ];
+}
+
 function normalizeProduct(input, options) {
   const allowEmptyId = Boolean(options && options.allowEmptyId);
   const product = input || {};
@@ -43,6 +83,12 @@ function normalizeProduct(input, options) {
 
   const images = normalizeImages(product.images);
   const image = trimText(product.image) || (images[0] ? images[0].url : "");
+  const baseProduct = {
+    ...product,
+    image,
+    images,
+    priceText: trimText(product.priceText) || "到店咨询价"
+  };
 
   return {
     id,
@@ -51,6 +97,7 @@ function normalizeProduct(input, options) {
     priceText: trimText(product.priceText) || "到店咨询价",
     image,
     images,
+    skus: normalizeSkus(product.skus, baseProduct),
     imageTone: trimText(product.imageTone) || "warm",
     tags: listFrom(product.tags),
     highlights: listFrom(product.highlights),

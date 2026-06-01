@@ -50,6 +50,36 @@
     </view>
 
     <view class="form-field">
+      <view class="image-header">
+        <view>
+          <view class="field-label">商品规格</view>
+          <view class="image-help">用于购物车下单，至少保留一个启用规格。</view>
+        </view>
+        <button class="small-button" bindtap="addSku">新增规格</button>
+      </view>
+      <view wx:for="{{form.skus}}" wx:key="id" class="sku-edit-card">
+        <view class="sku-edit-head">
+          <view class="sku-edit-title">规格 {{index + 1}}</view>
+          <switch checked="{{item.status === 'active'}}" data-index="{{index}}" bindchange="updateSkuStatus" color="#4f7669" />
+        </view>
+        <view class="sku-edit-grid">
+          <input class="field-input" value="{{item.colorName}}" data-index="{{index}}" data-field="colorName" bindinput="updateSkuField" placeholder="花色名" />
+          <input class="field-input" value="{{item.size}}" data-index="{{index}}" data-field="size" bindinput="updateSkuField" placeholder="尺寸，如 1.5m / 1.8m" />
+          <input class="field-input" value="{{item.priceText}}" data-index="{{index}}" data-field="priceText" bindinput="updateSkuField" placeholder="价格文案" />
+          <input class="field-input" value="{{item.stockText}}" data-index="{{index}}" data-field="stockText" bindinput="updateSkuField" placeholder="库存说明" />
+        </view>
+        <view class="sku-image-line">
+          <input class="field-input sku-image-input" value="{{item.image}}" data-index="{{index}}" data-field="image" bindinput="updateSkuField" placeholder="规格图片 fileID，可用主图" />
+          <button class="tiny-button" data-index="{{index}}" bindtap="useSkuMainImage">用主图</button>
+        </view>
+        <view class="sku-edit-foot">
+          <input class="field-input short-input" type="number" value="{{item.sort}}" data-index="{{index}}" data-field="sort" bindinput="updateSkuField" placeholder="排序" />
+          <button class="tiny-button danger" data-index="{{index}}" bindtap="removeSku">删除规格</button>
+        </view>
+      </view>
+    </view>
+
+    <view class="form-field">
       <view class="field-label">标签</view>
       <textarea class="field-textarea" value="{{form.tagsText}}" data-field="tagsText" bindinput="updateField" placeholder="一行一个，例如：热卖" />
     </view>
@@ -72,15 +102,15 @@
     <view class="switch-grid">
       <label class="switch-row">
         <text>首页推荐</text>
-        <switch checked="{{form.isFeatured}}" data-field="isFeatured" bindchange="updateSwitch" color="#52796f" />
+        <switch checked="{{form.isFeatured}}" data-field="isFeatured" bindchange="updateSwitch" color="#4f7669" />
       </label>
       <label class="switch-row">
         <text>特价</text>
-        <switch checked="{{form.isSpecial}}" data-field="isSpecial" bindchange="updateSwitch" color="#52796f" />
+        <switch checked="{{form.isSpecial}}" data-field="isSpecial" bindchange="updateSwitch" color="#4f7669" />
       </label>
       <label class="switch-row">
         <text>新品</text>
-        <switch checked="{{form.isNew}}" data-field="isNew" bindchange="updateSwitch" color="#52796f" />
+        <switch checked="{{form.isNew}}" data-field="isNew" bindchange="updateSwitch" color="#4f7669" />
       </label>
     </view>
 

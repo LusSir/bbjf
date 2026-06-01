@@ -1,0 +1,143 @@
+.cart-page {
+  padding-bottom: 56rpx;
+}
+
+.cart-header {
+  display: flex;
+  justify-content: space-between;
+  gap: 20rpx;
+  align-items: center;
+  margin-bottom: 24rpx;
+}
+
+.page-title {
+  color: #24352e;
+  font-size: 38rpx;
+  font-weight: 900;
+}
+
+.page-desc,
+.empty-desc,
+.cart-meta {
+  margin-top: 8rpx;
+  color: #6f7a72;
+  font-size: 24rpx;
+  line-height: 1.45;
+}
+
+.link-button,
+.primary-button,
+.qty-button,
+.remove-button {
+  margin: 0;
+  border-radius: 16rpx;
+  font-weight: 800;
+}
+
+.link-button {
+  min-width: 150rpx;
+  color: #4f7669;
+  background: #eaf3ed;
+  font-size: 24rpx;
+}
+
+.empty-card,
+.submit-card {
+  padding: 32rpx;
+}
+
+.empty-title,
+.section-title {
+  color: #24352e;
+  font-size: 32rpx;
+  font-weight: 900;
+}
+
+.cart-row {
+  display: flex;
+  gap: 18rpx;
+  padding: 18rpx;
+  margin-bottom: 16rpx;
+}
+
+.cart-thumb {
+  width: 150rpx;
+  height: 126rpx;
+  border-radius: 16rpx;
+  background: #f4f6f1;
+}
+
+.cart-main {
+  flex: 1;
+  min-width: 0;
+}
+
+.cart-name {
+  color: #24352e;
+  font-size: 28rpx;
+  font-weight: 900;
+}
+
+.quantity-row {
+  display: flex;
+  align-items: center;
+  gap: 10rpx;
+  margin-top: 14rpx;
+}
+
+.qty-button {
+  width: 58rpx;
+  height: 58rpx;
+  padding: 0;
+  color: #4f7669;
+  background: #eaf3ed;
+  font-size: 28rpx;
+  line-height: 58rpx;
+}
+
+.qty-input {
+  width: 76rpx;
+  height: 58rpx;
+  border-radius: 14rpx;
+  background: #f4f6f1;
+  color: #24352e;
+  text-align: center;
+  font-size: 25rpx;
+}
+
+.remove-button {
+  margin-left: auto;
+  padding: 0 18rpx;
+  color: #d8654f;
+  background: #fff0eb;
+  font-size: 23rpx;
+  line-height: 58rpx;
+}
+
+.field-input,
+.field-textarea {
+  width: 100%;
+  box-sizing: border-box;
+  margin-top: 18rpx;
+  border-radius: 16rpx;
+  background: #f4f6f1;
+  color: #24352e;
+  font-size: 26rpx;
+}
+
+.field-input {
+  height: 84rpx;
+  padding: 0 22rpx;
+}
+
+.field-textarea {
+  min-height: 150rpx;
+  padding: 18rpx 22rpx;
+}
+
+.primary-button {
+  margin-top: 24rpx;
+  color: #ffffff;
+  background: #4f7669;
+  font-size: 27rpx;
+}

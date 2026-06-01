@@ -1,0 +1,29 @@
+<view class="page orders-page">
+  <view class="page-title">我的订单</view>
+  <view class="page-desc">门店会根据订单联系方式主动确认。</view>
+
+  <view wx:if="{{loading}}" class="card state-card">
+    <view class="state-title">正在加载订单</view>
+  </view>
+
+  <view wx:elif="{{!orders.length}}" class="card state-card">
+    <view class="state-title">还没有订单</view>
+    <view class="page-desc">可以先去产品页挑选商品加入购物车。</view>
+    <button class="primary-button" bindtap="openProducts">去选产品</button>
+  </view>
+
+  <view wx:else>
+    <view wx:for="{{orders}}" wx:key="_id" class="card order-card" data-id="{{item._id}}" bindtap="openOrderDetail">
+      <view class="order-head">
+        <view>
+          <view class="order-title">订单 {{index + 1}}</view>
+          <view class="contact-line">{{item.contactName}} · {{item.contactPhone}}</view>
+        </view>
+        <view class="status-pill">{{item.statusName}}</view>
+      </view>
+      <view class="order-summary">共 {{item.itemCount}} 类 / {{item.totalQuantity}} 件商品</view>
+      <view wx:for="{{item.previewItems}}" wx:for-item="orderItem" wx:key="skuId" class="preview-line">{{orderItem.summaryText}}</view>
+      <view wx:if="{{item.hiddenItemCount}}" class="more-line">还有 {{item.hiddenItemCount}} 类商品，点击查看详情</view>
+    </view>
+  </view>
+</view>

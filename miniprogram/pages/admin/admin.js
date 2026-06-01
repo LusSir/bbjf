@@ -42,5 +42,8 @@ Page({
   },
   openCategoryManager() {
     wx.navigateTo({ url: "/pages/admin-categories/admin-categories" });
+  },
+  openOrderManager() {
+    wx.navigateTo({ url: "/pages/admin-orders/admin-orders" });
   }
 });

@@ -8,20 +8,20 @@
 }
 
 .state-title {
-  color: #27302b;
+  color: #26302a;
   font-size: 32rpx;
   font-weight: 900;
 }
 
 .state-desc {
   margin-top: 12rpx;
-  color: #69746e;
+  color: #5f6f66;
   font-size: 25rpx;
   line-height: 1.5;
 }
 
 .section-title {
-  color: #27302b;
+  color: #26302a;
   font-size: 34rpx;
   font-weight: 900;
 }
@@ -32,7 +32,7 @@
 
 .field-label {
   margin-bottom: 10rpx;
-  color: #4c5650;
+  color: #43564d;
   font-size: 25rpx;
   font-weight: 800;
 }
@@ -42,8 +42,8 @@
   width: 100%;
   box-sizing: border-box;
   border-radius: 16rpx;
-  background: #f8f7f3;
-  color: #27302b;
+  background: #f4f6f1;
+  color: #26302a;
   font-size: 26rpx;
 }
 
@@ -72,7 +72,7 @@
 
 .image-help {
   flex: 1;
-  color: #7b786f;
+  color: #6f7a72;
   font-size: 24rpx;
   line-height: 1.45;
 }
@@ -84,8 +84,8 @@
   min-height: 116rpx;
   margin-top: 16rpx;
   border-radius: 16rpx;
-  background: #f8f7f3;
-  color: #7b786f;
+  background: #f4f6f1;
+  color: #6f7a72;
   font-size: 25rpx;
 }
 
@@ -94,8 +94,8 @@
   gap: 18rpx;
   margin-top: 16rpx;
   padding: 16rpx;
-  border-radius: 18rpx;
-  background: #f8f7f3;
+  border-radius: 16rpx;
+  background: #f4f6f1;
 }
 
 .form-image {
@@ -116,7 +116,7 @@
   padding: 0 16rpx;
   border-radius: 14rpx;
   background: #ffffff;
-  color: #27302b;
+  color: #26302a;
   font-size: 25rpx;
 }
 
@@ -130,8 +130,8 @@
 .tiny-button {
   margin: 0;
   border-radius: 14rpx;
-  color: #52796f;
-  background: #eef5ef;
+  color: #4f7669;
+  background: #e8f0e9;
   font-size: 24rpx;
   font-weight: 800;
 }
@@ -143,12 +143,53 @@
 
 .tiny-button.active {
   color: #ffffff;
-  background: #52796f;
+  background: #4f7669;
 }
 
 .tiny-button.danger {
-  color: #df765d;
-  background: #fff1ec;
+  color: #d96f57;
+  background: #fff0eb;
+}
+
+.sku-edit-card {
+  margin-top: 16rpx;
+  padding: 18rpx;
+  border-radius: 18rpx;
+  background: #f7f4ef;
+}
+
+.sku-edit-head,
+.sku-edit-foot,
+.sku-image-line {
+  display: flex;
+  align-items: center;
+  gap: 14rpx;
+}
+
+.sku-edit-head {
+  justify-content: space-between;
+}
+
+.sku-edit-title {
+  color: #26302a;
+  font-size: 26rpx;
+  font-weight: 900;
+}
+
+.sku-edit-grid {
+  display: grid;
+  gap: 12rpx;
+  margin-top: 14rpx;
+}
+
+.sku-image-line,
+.sku-edit-foot {
+  margin-top: 12rpx;
+}
+
+.sku-image-input {
+  flex: 1;
+  min-width: 0;
 }
 
 .switch-grid {
@@ -161,7 +202,7 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  color: #4c5650;
+  color: #43564d;
   font-size: 26rpx;
 }
 
@@ -181,9 +222,9 @@
 
 .primary-button {
   margin-top: 30rpx;
-  border-radius: 18rpx;
+  border-radius: 16rpx;
   color: #ffffff;
-  background: #52796f;
+  background: #4f7669;
   font-size: 28rpx;
   font-weight: 800;
 }

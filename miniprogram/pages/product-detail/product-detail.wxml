@@ -6,8 +6,8 @@
 
   <view class="detail-main card">
     <view class="detail-name">{{product.name}}</view>
-    <view class="detail-price {{product.priceType === 'special' ? 'special' : ''}}">{{product.priceText}}</view>
-    <view class="detail-note">花色、尺寸、库存以门店实物为准</view>
+    <view class="detail-price {{product.priceType === 'special' ? 'special' : ''}}">{{selectedSku.priceText || product.priceText}}</view>
+    <view class="detail-note">{{selectedSku.stockText || '花色、尺寸、库存以门店实物为准'}}</view>
   </view>
 
   <view class="section card detail-section">
@@ -23,6 +23,32 @@
         <view class="color-name">{{item.name || '花色图'}}</view>
       </view>
     </scroll-view>
+  </view>
+
+  <view wx:if="{{product.skus && product.skus.length}}" class="section card detail-section">
+    <view class="section-title">选择规格</view>
+    <view class="sku-grid">
+      <view
+        wx:for="{{product.skus}}"
+        wx:key="id"
+        class="sku-card {{selectedSkuId === item.id ? 'active' : ''}} {{item.status === 'disabled' ? 'disabled' : ''}}"
+        data-id="{{item.id}}"
+        bindtap="selectSku"
+      >
+        <view class="sku-title">{{item.colorName}}</view>
+        <view class="sku-meta">{{item.size || '尺寸到店确认'}}</view>
+        <view class="sku-meta">{{item.priceText}}</view>
+        <view class="sku-meta">{{item.stockText}}</view>
+      </view>
+    </view>
+    <view class="quantity-line">
+      <view class="quantity-label">数量</view>
+      <input class="quantity-input" type="number" value="{{quantity}}" bindblur="updateQuantity" />
+    </view>
+    <view class="cart-actions">
+      <button class="cart-button primary" bindtap="addToCart">加入购物车</button>
+      <button class="cart-button" bindtap="openCart">去购物车</button>
+    </view>
   </view>
 
   <view class="section card detail-section">
