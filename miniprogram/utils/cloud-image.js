@@ -2,6 +2,14 @@ function isCloudFileId(url) {
   return String(url || "").trim().startsWith("cloud://");
 }
 
+function isRenderableImageUrl(url) {
+  const value = String(url || "").trim();
+  if (!value || value.includes("<") || value.includes(">")) return false;
+  return value.startsWith("/")
+    || value.startsWith("http://")
+    || value.startsWith("https://");
+}
+
 function resolveCloudFileUrls(urls) {
   const sourceUrls = Array.isArray(urls) ? urls : [];
   const cloudUrls = sourceUrls.filter(isCloudFileId);
@@ -10,8 +18,8 @@ function resolveCloudFileUrls(urls) {
     return Promise.resolve(sourceUrls);
   }
 
-  return wx.cloud.getTempFileURL({ fileList: cloudUrls })
-    .then((result) => {
+  return new Promise((resolve) => {
+    const finish = (result) => {
       const urlMap = {};
       const fileList = result && Array.isArray(result.fileList) ? result.fileList : [];
       fileList.forEach((item) => {
@@ -19,9 +27,23 @@ function resolveCloudFileUrls(urls) {
           urlMap[item.fileID] = item.tempFileURL;
         }
       });
-      return sourceUrls.map((url) => urlMap[url] || url);
-    })
-    .catch(() => sourceUrls);
+      resolve(sourceUrls.map((url) => urlMap[url] || url));
+    };
+
+    try {
+      const task = wx.cloud.getTempFileURL({
+        fileList: cloudUrls,
+        success: finish,
+        fail: () => resolve(sourceUrls)
+      });
+
+      if (task && typeof task.then === "function") {
+        task.then(finish).catch(() => resolve(sourceUrls));
+      }
+    } catch (error) {
+      resolve(sourceUrls);
+    }
+  });
 }
 
 function resolveCloudFileUrl(url) {
@@ -30,6 +52,7 @@ function resolveCloudFileUrl(url) {
 
 module.exports = {
   isCloudFileId,
+  isRenderableImageUrl,
   resolveCloudFileUrl,
   resolveCloudFileUrls
 };

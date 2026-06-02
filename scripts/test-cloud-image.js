@@ -43,6 +43,27 @@ async function run() {
 
   assert.strictEqual(cloudImage.isCloudFileId("cloud://env/a.jpg"), true);
   assert.strictEqual(cloudImage.isCloudFileId("/assets/a.jpg"), false);
+  assert.strictEqual(cloudImage.isRenderableImageUrl("cloud://env/a.jpg"), false);
+  assert.strictEqual(cloudImage.isRenderableImageUrl("<URL>"), false);
+  assert.strictEqual(cloudImage.isRenderableImageUrl("/assets/a.jpg"), true);
+  assert.strictEqual(cloudImage.isRenderableImageUrl("https://example.com/a.jpg"), true);
+
+  global.wx.cloud.getTempFileURL = (options) => {
+    requestedFileList = options.fileList;
+    options.success({
+      fileList: [
+        {
+          fileID: "cloud://env/c.jpg",
+          tempFileURL: "https://tmp.example/c.jpg"
+        }
+      ]
+    });
+  };
+
+  const callbackUrls = await cloudImage.resolveCloudFileUrls(["cloud://env/c.jpg"]);
+  assert.deepStrictEqual(requestedFileList, ["cloud://env/c.jpg"]);
+  assert.deepStrictEqual(callbackUrls, ["https://tmp.example/c.jpg"]);
+
   console.log("cloud image tests passed");
 }
 
