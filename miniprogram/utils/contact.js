@@ -1,4 +1,5 @@
 const fallbackStore = require("../config/store");
+const cloudImage = require("./cloud-image");
 
 function getStore(store) {
   return store || fallbackStore;
@@ -15,21 +16,23 @@ function openWechatQrCode(store) {
     return;
   }
 
-  wx.getImageInfo({
-    src: currentStore.wechatQrCode,
-    success(res) {
-      wx.previewImage({
-        current: res.path,
-        urls: [res.path]
-      });
-    },
-    fail() {
-      wx.showModal({
-        title: "二维码加载失败",
-        content: "请确认微信二维码图片已上传成功，或本地路径配置正确。",
-        showCancel: false
-      });
-    }
+  cloudImage.resolveCloudFileUrl(currentStore.wechatQrCode).then((src) => {
+    wx.getImageInfo({
+      src,
+      success(res) {
+        wx.previewImage({
+          current: res.path,
+          urls: [res.path]
+        });
+      },
+      fail() {
+        wx.showModal({
+          title: "二维码加载失败",
+          content: "请确认微信二维码图片已上传成功，或本地路径配置正确。",
+          showCancel: false
+        });
+      }
+    });
   });
 }
 

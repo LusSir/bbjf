@@ -1,4 +1,5 @@
 const fallbackProducts = require("../data/products");
+const cloudImage = require("./cloud-image");
 const productModel = require("./product-model");
 
 function sortProducts(products) {
@@ -17,6 +18,31 @@ function normalizeProduct(item) {
     images: productModel.normalizeProductImages(item.images),
     skus: productModel.normalizeProductSkus(item.skus, item)
   };
+}
+
+function resolveProductImages(product) {
+  const item = product || {};
+  const images = item.images || [];
+  const skus = item.skus || [];
+  const urls = [item.image]
+    .concat(images.map((image) => image.url))
+    .concat(skus.map((sku) => sku.image));
+
+  return cloudImage.resolveCloudFileUrls(urls).then((resolvedUrls) => {
+    const resolvedImage = resolvedUrls[0] || item.image;
+    const imageUrls = resolvedUrls.slice(1, 1 + images.length);
+    const skuUrls = resolvedUrls.slice(1 + images.length);
+
+    return Object.assign({}, item, {
+      image: resolvedImage,
+      images: images.map((image, index) => Object.assign({}, image, {
+        url: imageUrls[index] || image.url
+      })),
+      skus: skus.map((sku, index) => Object.assign({}, sku, {
+        image: skuUrls[index] || sku.image
+      }))
+    });
+  });
 }
 
 function activeOnly(products) {
@@ -45,20 +71,20 @@ function listProducts(options) {
       if (!products.length && !includeDraft) {
         return sortProducts(fallbackProducts);
       }
-      return sortProducts(includeDraft ? products : activeOnly(products));
+      return Promise.all(sortProducts(includeDraft ? products : activeOnly(products)).map(resolveProductImages));
     })
-    .catch(() => includeDraft ? [] : sortProducts(fallbackProducts));
+    .catch(() => Promise.all((includeDraft ? [] : sortProducts(fallbackProducts)).map(resolveProductImages)));
 }
 
 function getProductById(id) {
   return callProducts("get", { id })
     .then((result) => {
       const product = result.product || fallbackProducts.find((item) => item.id === id) || null;
-      return product ? normalizeProduct(product) : null;
+      return product ? resolveProductImages(normalizeProduct(product)) : null;
     })
     .catch(() => {
       const product = fallbackProducts.find((item) => item.id === id) || null;
-      return product ? normalizeProduct(product) : null;
+      return product ? resolveProductImages(normalizeProduct(product)) : null;
     });
 }
 
@@ -76,5 +102,6 @@ module.exports = {
   listProducts,
   saveProduct,
   normalizeProduct,
+  resolveProductImages,
   sortProducts
 };

@@ -1,5 +1,6 @@
 const contact = require("../../utils/contact");
 const auth = require("../../utils/auth");
+const cloudImage = require("../../utils/cloud-image");
 const settingsService = require("../../utils/settings-service");
 const fallbackStore = require("../../config/store");
 
@@ -24,8 +25,19 @@ Page({
   },
   loadStore() {
     settingsService.getStore().then((store) => {
-      this.setData({ store });
+      this.resolveStoreImages(store).then((resolvedStore) => {
+        this.setData({ store: resolvedStore });
+      });
     });
+  },
+  resolveStoreImages(store) {
+    const currentStore = store || fallbackStore;
+    const storePhotos = currentStore.storePhotos || [];
+    return cloudImage.resolveCloudFileUrls([currentStore.wechatQrCode].concat(storePhotos))
+      .then((urls) => Object.assign({}, currentStore, {
+        wechatQrCode: urls[0] || currentStore.wechatQrCode,
+        storePhotos: urls.slice(1)
+      }));
   },
   onShareAppMessage() {
     return {
