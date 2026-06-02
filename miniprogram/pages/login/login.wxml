@@ -22,5 +22,9 @@
     <button wx:if="{{isAdmin}}" class="secondary-button" bindtap="openAdmin">
       进入商铺管理
     </button>
+
+    <button wx:if="{{user}}" class="logout-button" bindtap="handleLogout">
+      退出登录
+    </button>
   </view>
 </view>

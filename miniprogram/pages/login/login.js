@@ -34,6 +34,11 @@ Page({
         this.setData({ loading: false });
       });
   },
+  handleLogout() {
+    auth.logout();
+    this.setUser(null);
+    wx.showToast({ title: "已退出登录", icon: "success" });
+  },
   getUserProfile() {
     if (!wx.getUserProfile) {
       return Promise.resolve({});

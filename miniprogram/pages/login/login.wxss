@@ -7,14 +7,14 @@
 }
 
 .login-title {
-  color: #27302b;
+  color: #26302a;
   font-size: 42rpx;
   font-weight: 900;
 }
 
 .login-desc {
   margin-top: 16rpx;
-  color: #69746e;
+  color: #5f6f66;
   font-size: 26rpx;
   line-height: 1.6;
 }
@@ -22,28 +22,28 @@
 .user-panel {
   margin-top: 30rpx;
   padding: 24rpx;
-  border-radius: 20rpx;
-  background: #f8f7f3;
+  border-radius: 16rpx;
+  background: #f4f6f1;
 }
 
 .status-pill {
   display: inline-flex;
   padding: 8rpx 18rpx;
   border-radius: 999rpx;
-  background: #eef5ef;
-  color: #52796f;
+  background: #e8f0e9;
+  color: #4f7669;
   font-size: 24rpx;
   font-weight: 800;
 }
 
 .status-pill.admin {
-  background: #ffe8df;
-  color: #df765d;
+  background: #fff0eb;
+  color: #d96f57;
 }
 
 .openid-text {
   margin-top: 16rpx;
-  color: #7b786f;
+  color: #6f7a72;
   font-size: 22rpx;
   line-height: 1.5;
   word-break: break-all;
@@ -51,25 +51,31 @@
 
 .user-name {
   margin-top: 16rpx;
-  color: #27302b;
+  color: #26302a;
   font-size: 26rpx;
   font-weight: 800;
 }
 
 .primary-button,
-.secondary-button {
+.secondary-button,
+.logout-button {
   margin-top: 30rpx;
-  border-radius: 18rpx;
+  border-radius: 16rpx;
   font-size: 28rpx;
   font-weight: 800;
 }
 
 .primary-button {
   color: #ffffff;
-  background: #52796f;
+  background: #4f7669;
 }
 
 .secondary-button {
-  color: #52796f;
-  background: #eef5ef;
+  color: #4f7669;
+  background: #e8f0e9;
+}
+
+.logout-button {
+  color: #d96f57;
+  background: #fff0eb;
 }

@@ -16,11 +16,10 @@ Page({
   },
   onShow() {
     this.loadStore();
-    auth.refreshUser().then((user) => {
-      this.setData({
-        user,
-        isAdmin: Boolean(user && user.role === "admin")
-      });
+    const user = auth.getCachedUser();
+    this.setData({
+      user,
+      isAdmin: Boolean(user && user.role === "admin")
     });
   },
   loadStore() {

@@ -7,15 +7,24 @@ function getAppSafe() {
 }
 
 function setCurrentUser(user) {
+  const nextUser = user || null;
   const app = getAppSafe();
   if (app) {
-    app.globalData.user = user || null;
-    app.globalData.isAdmin = role.isAdmin(user);
+    app.globalData.user = nextUser;
+    app.globalData.isAdmin = role.isAdmin(nextUser);
   }
 
-  if (user && typeof wx !== "undefined") {
-    wx.setStorageSync(USER_STORAGE_KEY, user);
+  if (typeof wx !== "undefined") {
+    if (nextUser) {
+      wx.setStorageSync(USER_STORAGE_KEY, nextUser);
+    } else {
+      wx.removeStorageSync(USER_STORAGE_KEY);
+    }
   }
+}
+
+function logout() {
+  setCurrentUser(null);
 }
 
 function getCachedUser() {
@@ -85,6 +94,7 @@ module.exports = {
   USER_STORAGE_KEY,
   getCachedUser,
   login,
+  logout,
   normalizeProfile,
   refreshUser,
   requireAdmin,
