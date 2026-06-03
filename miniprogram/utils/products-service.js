@@ -25,8 +25,8 @@ function resolveProductImages(product) {
   const images = item.images || [];
   const skus = item.skus || [];
   const urls = [item.displayImage || item.image]
-    .concat(images.map((image) => image.url))
-    .concat(skus.map((sku) => sku.image));
+    .concat(images.map((image) => image.displayUrl || image.url))
+    .concat(skus.map((sku) => sku.displayImage || sku.image));
 
   return cloudImage.resolveCloudFileUrls(urls).then((resolvedUrls) => {
     const resolvedImage = cloudImage.isRenderableImageUrl(resolvedUrls[0]) ? resolvedUrls[0] : "";
