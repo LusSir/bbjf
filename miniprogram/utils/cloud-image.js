@@ -17,6 +17,13 @@ function warnCloudImage(message, detail) {
   }
 }
 
+function normalizeCloudFileList(fileIDs) {
+  return Array.from(new Set(fileIDs)).map((fileID) => ({
+    fileID,
+    maxAge: 60 * 60
+  }));
+}
+
 function resolveCloudFileUrls(urls) {
   const sourceUrls = Array.isArray(urls) ? urls : [];
   const cloudUrls = sourceUrls.filter(isCloudFileId);
@@ -48,29 +55,36 @@ function resolveCloudFileUrls(urls) {
       fileList.forEach((item) => {
         if (item && item.fileID && item.tempFileURL) {
           urlMap[item.fileID] = item.tempFileURL;
+        } else if (item && item.fileID) {
+          warnCloudImage("getTempFileURL empty item", {
+            fileID: item.fileID,
+            status: item.status,
+            errMsg: item.errMsg
+          });
         }
       });
       finishWithFallback(sourceUrls.map((url) => urlMap[url] || url));
     };
 
     try {
+      const fileList = normalizeCloudFileList(cloudUrls);
       const task = wx.cloud.getTempFileURL({
-        fileList: cloudUrls,
+        fileList,
         success: finish,
         fail: (error) => {
-          warnCloudImage("getTempFileURL failed", { fileList: cloudUrls, error });
+          warnCloudImage("getTempFileURL failed", { fileList, error });
           finishWithFallback(sourceUrls);
         }
       });
 
       if (task && typeof task.then === "function") {
         task.then(finish).catch((error) => {
-          warnCloudImage("getTempFileURL promise failed", { fileList: cloudUrls, error });
+          warnCloudImage("getTempFileURL promise failed", { fileList, error });
           finishWithFallback(sourceUrls);
         });
       }
     } catch (error) {
-      warnCloudImage("getTempFileURL threw", { fileList: cloudUrls, error });
+      warnCloudImage("getTempFileURL threw", { fileList: normalizeCloudFileList(cloudUrls), error });
       finishWithFallback(sourceUrls);
     }
 

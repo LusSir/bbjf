@@ -32,7 +32,10 @@ async function run() {
     "cloud://env/b.jpg"
   ]);
 
-  assert.deepStrictEqual(requestedFileList, ["cloud://env/a.jpg", "cloud://env/b.jpg"]);
+  assert.deepStrictEqual(requestedFileList, [
+    { fileID: "cloud://env/a.jpg", maxAge: 3600 },
+    { fileID: "cloud://env/b.jpg", maxAge: 3600 }
+  ]);
   assert.deepStrictEqual(urls, [
     "/assets/a.jpg",
     "https://tmp.example/a.jpg",
@@ -61,7 +64,7 @@ async function run() {
   };
 
   const callbackUrls = await cloudImage.resolveCloudFileUrls(["cloud://env/c.jpg"]);
-  assert.deepStrictEqual(requestedFileList, ["cloud://env/c.jpg"]);
+  assert.deepStrictEqual(requestedFileList, [{ fileID: "cloud://env/c.jpg", maxAge: 3600 }]);
   assert.deepStrictEqual(callbackUrls, ["https://tmp.example/c.jpg"]);
 
   global.wx.cloud.getTempFileURL = (options) => {
@@ -72,11 +75,27 @@ async function run() {
     "cloud://env/d.jpg",
     "/assets/e.jpg"
   ]);
-  assert.deepStrictEqual(requestedFileList, ["cloud://env/d.jpg"]);
+  assert.deepStrictEqual(requestedFileList, [{ fileID: "cloud://env/d.jpg", maxAge: 3600 }]);
   assert.deepStrictEqual(failedUrls, [
     "cloud://env/d.jpg",
     "/assets/e.jpg"
   ]);
+
+  global.wx.cloud.getTempFileURL = (options) => {
+    requestedFileList = options.fileList;
+    return Promise.resolve({
+      fileList: [
+        {
+          fileID: "cloud://env/f.jpg",
+          status: -1,
+          errMsg: "empty download url"
+        }
+      ]
+    });
+  };
+  const emptyUrls = await cloudImage.resolveCloudFileUrls(["cloud://env/f.jpg"]);
+  assert.deepStrictEqual(requestedFileList, [{ fileID: "cloud://env/f.jpg", maxAge: 3600 }]);
+  assert.deepStrictEqual(emptyUrls, ["cloud://env/f.jpg"]);
 
   console.log("cloud image tests passed");
 }
