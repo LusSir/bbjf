@@ -8,7 +8,7 @@ Component({
       observer(product) {
         const skus = product && product.skus ? product.skus : [];
         const displaySku = skus.find((item) => item.status === "active") || skus[0] || null;
-        const image = product && product.image ? product.image : "";
+        const image = product && (product.displayImage || product.image) ? (product.displayImage || product.image) : "";
         this.setData({
           displaySku,
           displayImage: cloudImage.isRenderableImageUrl(image) ? image : ""
@@ -25,7 +25,8 @@ Component({
     resolveDisplayImage(image) {
       if (!image) return;
       cloudImage.resolveCloudFileUrl(image).then((url) => {
-        if (this.data.product && this.data.product.image === image && cloudImage.isRenderableImageUrl(url)) {
+        const currentImage = this.data.product ? (this.data.product.displayImage || this.data.product.image) : "";
+        if (currentImage === image && cloudImage.isRenderableImageUrl(url)) {
           this.setData({ displayImage: url });
         }
       });

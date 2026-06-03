@@ -24,22 +24,26 @@ function resolveProductImages(product) {
   const item = product || {};
   const images = item.images || [];
   const skus = item.skus || [];
-  const urls = [item.image]
+  const urls = [item.displayImage || item.image]
     .concat(images.map((image) => image.url))
     .concat(skus.map((sku) => sku.image));
 
   return cloudImage.resolveCloudFileUrls(urls).then((resolvedUrls) => {
-    const resolvedImage = resolvedUrls[0] || item.image;
+    const resolvedImage = cloudImage.isRenderableImageUrl(resolvedUrls[0]) ? resolvedUrls[0] : "";
     const imageUrls = resolvedUrls.slice(1, 1 + images.length);
     const skuUrls = resolvedUrls.slice(1 + images.length);
 
     return Object.assign({}, item, {
-      image: resolvedImage,
+      displayImage: resolvedImage,
       images: images.map((image, index) => Object.assign({}, image, {
-        url: imageUrls[index] || image.url
+        displayUrl: cloudImage.isRenderableImageUrl(image.displayUrl || imageUrls[index])
+          ? (image.displayUrl || imageUrls[index])
+          : ""
       })),
       skus: skus.map((sku, index) => Object.assign({}, sku, {
-        image: skuUrls[index] || sku.image
+        displayImage: cloudImage.isRenderableImageUrl(sku.displayImage || skuUrls[index])
+          ? (sku.displayImage || skuUrls[index])
+          : ""
       }))
     });
   });

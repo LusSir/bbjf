@@ -1,6 +1,6 @@
 <view wx:if="{{product}}" class="page detail-page safe-bottom">
   <view class="detail-cover tone-{{product.imageTone || 'warm'}}">
-    <image wx:if="{{product.image}}" class="detail-image" src="{{product.image}}" mode="aspectFill" />
+    <image wx:if="{{product.displayImage}}" class="detail-image" src="{{product.displayImage}}" mode="aspectFill" />
     <view wx:for="{{product.tags}}" wx:key="*this" class="detail-tag">{{item}}</view>
   </view>
 

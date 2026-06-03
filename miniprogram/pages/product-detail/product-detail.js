@@ -12,22 +12,22 @@ function resolveProductImages(product) {
   const item = product || {};
   const images = productModel.normalizeProductImages(item.images);
   const skus = productModel.normalizeProductSkus(item.skus, item);
-  const sourceUrls = [item.image]
-    .concat(images.map((image) => image.url))
-    .concat(skus.map((sku) => sku.image));
+  const sourceUrls = [item.displayImage || item.image]
+    .concat(images.map((image) => image.displayUrl || image.url))
+    .concat(skus.map((sku) => sku.displayImage || sku.image));
 
   return cloudImage.resolveCloudFileUrls(sourceUrls).then((resolvedUrls) => {
     const imageCount = images.length;
-    const primaryImage = sanitizeImageUrl(resolvedUrls[0]);
+    const primaryImage = sanitizeImageUrl(item.displayImage) || sanitizeImageUrl(resolvedUrls[0]);
     const resolvedImages = images.map((image, index) => Object.assign({}, image, {
-      displayUrl: sanitizeImageUrl(resolvedUrls[index + 1])
+      displayUrl: sanitizeImageUrl(image.displayUrl) || sanitizeImageUrl(resolvedUrls[index + 1])
     }));
     const resolvedSkus = skus.map((sku, index) => Object.assign({}, sku, {
-      image: sanitizeImageUrl(resolvedUrls[index + 1 + imageCount])
+      displayImage: sanitizeImageUrl(sku.displayImage) || sanitizeImageUrl(resolvedUrls[index + 1 + imageCount])
     }));
 
     return Object.assign({}, item, {
-      image: primaryImage || (resolvedImages[0] ? resolvedImages[0].displayUrl : ""),
+      displayImage: primaryImage || (resolvedImages[0] ? resolvedImages[0].displayUrl : ""),
       images: resolvedImages,
       skus: resolvedSkus
     });

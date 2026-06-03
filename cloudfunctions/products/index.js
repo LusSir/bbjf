@@ -111,6 +111,80 @@ function normalizeProduct(input, options) {
   };
 }
 
+function isCloudFileId(url) {
+  return String(url || "").trim().startsWith("cloud://");
+}
+
+function isRenderableImageUrl(url) {
+  const value = String(url || "").trim();
+  if (!value) return false;
+  return value.startsWith("/") || value.startsWith("http://") || value.startsWith("https://");
+}
+
+async function resolveCloudFileUrls(urls) {
+  const sourceUrls = Array.isArray(urls) ? urls : [];
+  const cloudUrls = Array.from(new Set(sourceUrls.filter(isCloudFileId)));
+  if (!cloudUrls.length) return sourceUrls;
+
+  try {
+    const result = await cloud.getTempFileURL({
+      fileList: cloudUrls
+    });
+    const urlMap = {};
+    const fileList = result && Array.isArray(result.fileList) ? result.fileList : [];
+    fileList.forEach((item) => {
+      if (item && item.fileID && item.tempFileURL) {
+        urlMap[item.fileID] = item.tempFileURL;
+      } else if (item && item.fileID) {
+        console.warn("[bbjf] products getTempFileURL empty", {
+          fileID: item.fileID,
+          status: item.status,
+          errMsg: item.errMsg
+        });
+      }
+    });
+    return sourceUrls.map((url) => urlMap[url] || url);
+  } catch (error) {
+    console.warn("[bbjf] products getTempFileURL failed", {
+      fileList: cloudUrls,
+      message: error && error.message ? error.message : String(error || "")
+    });
+    return sourceUrls;
+  }
+}
+
+async function attachDisplayImages(product) {
+  if (!product) return product;
+
+  const images = normalizeImages(product.images);
+  const skus = normalizeSkus(product.skus, product);
+  const sourceUrls = [product.image]
+    .concat(images.map((image) => image.url))
+    .concat(skus.map((sku) => sku.image));
+  const resolvedUrls = await resolveCloudFileUrls(sourceUrls);
+  const imageCount = images.length;
+  const displayImage = isRenderableImageUrl(resolvedUrls[0]) ? resolvedUrls[0] : "";
+
+  return {
+    ...product,
+    displayImage,
+    images: images.map((image, index) => {
+      const displayUrl = resolvedUrls[index + 1];
+      return {
+        ...image,
+        displayUrl: isRenderableImageUrl(displayUrl) ? displayUrl : ""
+      };
+    }),
+    skus: skus.map((sku, index) => {
+      const displayImageUrl = resolvedUrls[index + 1 + imageCount];
+      return {
+        ...sku,
+        displayImage: isRenderableImageUrl(displayImageUrl) ? displayImageUrl : ""
+      };
+    })
+  };
+}
+
 async function assertAdmin(openid) {
   const result = await db.collection("users").where({ _openid: openid, role: "admin" }).limit(1).get();
   if (!result.data.length) {
@@ -141,6 +215,11 @@ async function listProducts(includeDraft) {
   }
 }
 
+async function listDisplayProducts(includeDraft) {
+  const products = await listProducts(includeDraft);
+  return Promise.all(products.map(attachDisplayImages));
+}
+
 async function getProduct(id) {
   try {
     const result = await db.collection(PRODUCTS_COLLECTION).where({ id }).limit(1).get();
@@ -152,6 +231,10 @@ async function getProduct(id) {
     }
     throw error;
   }
+}
+
+async function getDisplayProduct(id) {
+  return attachDisplayImages(await getProduct(id));
 }
 
 function formatProductId(sequence) {
@@ -266,10 +349,10 @@ async function main(event) {
   const data = event && event.data ? event.data : {};
 
   if (action === "list") {
-    return { products: await listProducts(Boolean(data.includeDraft)) };
+    return { products: await listDisplayProducts(Boolean(data.includeDraft)) };
   }
   if (action === "get") {
-    return { product: await getProduct(data.id) };
+    return { product: await getDisplayProduct(data.id) };
   }
   if (action === "save") {
     return { product: await saveProduct(data.product, wxContext.OPENID) };

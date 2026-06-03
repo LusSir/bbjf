@@ -36,30 +36,10 @@ function resolveCloudFileUrls(urls) {
     };
     const finishWithFallback = (resolvedUrls) => {
       const unresolvedCloudUrls = resolvedUrls.filter(isCloudFileId);
-      if (!unresolvedCloudUrls.length || !wx.cloud.downloadFile) {
-        settle(resolvedUrls);
-        return;
+      if (unresolvedCloudUrls.length) {
+        warnCloudImage("cloud image unresolved", unresolvedCloudUrls);
       }
-
-      Promise.all(unresolvedCloudUrls.map((fileID) => new Promise((downloadResolve) => {
-        wx.cloud.downloadFile({
-          fileID,
-          success: (res) => downloadResolve([fileID, res.tempFilePath || ""]),
-          fail: (error) => {
-            warnCloudImage("downloadFile failed", { fileID, error });
-            downloadResolve([fileID, ""]);
-          }
-        });
-      }))).then((entries) => {
-        const downloadMap = {};
-        entries.forEach((entry) => {
-          if (entry[1]) downloadMap[entry[0]] = entry[1];
-        });
-        settle(resolvedUrls.map((url) => downloadMap[url] || url));
-      }).catch((error) => {
-        warnCloudImage("downloadFile fallback failed", error);
-        settle(resolvedUrls);
-      });
+      settle(resolvedUrls);
     };
 
     const finish = (result) => {

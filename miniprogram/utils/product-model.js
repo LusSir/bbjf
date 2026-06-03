@@ -20,10 +20,15 @@ function normalizeImage(value) {
 
 function normalizeProductImages(images) {
   return (Array.isArray(images) ? images : [])
-    .map((item) => ({
-      name: trimText(item && item.name),
-      url: normalizeImage(item && (item.url || item.image))
-    }))
+    .map((item) => {
+      const image = {
+        name: trimText(item && item.name),
+        url: normalizeImage(item && (item.url || item.image))
+      };
+      const displayUrl = trimText(item && item.displayUrl);
+      if (displayUrl) image.displayUrl = displayUrl;
+      return image;
+    })
     .filter((item) => item.url);
 }
 
@@ -51,7 +56,7 @@ function appendProductImage(form, image) {
 function normalizeSku(input, index, product) {
   const sku = input || {};
   const owner = product || {};
-  return {
+  const normalized = {
     id: trimText(sku.id) || `sku-${index + 1}`,
     colorName: trimText(sku.colorName || sku.name) || "默认规格",
     image: normalizeImage(sku.image) || getPrimaryImage(owner),
@@ -61,6 +66,9 @@ function normalizeSku(input, index, product) {
     status: sku.status === "disabled" ? "disabled" : "active",
     sort: Number(sku.sort) || (index + 1) * 10
   };
+  const displayImage = trimText(sku.displayImage);
+  if (displayImage) normalized.displayImage = displayImage;
+  return normalized;
 }
 
 function normalizeProductSkus(skus, product) {
