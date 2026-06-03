@@ -62,7 +62,7 @@ Page({
       sizeType: ["compressed"],
       sourceType: ["album", "camera"],
       success: (res) => {
-        this.uploadPhotoQueue(res.tempFilePaths || [], 0, []);
+        this.uploadPhotoQueue(res.tempFilePaths || [], 0, [], []);
       }
     });
   },
@@ -76,7 +76,10 @@ Page({
       cloudPath,
       filePath: tempPath,
       success: (res) => {
-        this.setData({ "form.wechatQrCode": res.fileID });
+        this.setData({
+          "form.wechatQrCode": res.fileID,
+          "form.displayWechatQrCode": tempPath
+        });
         wx.showToast({ title: "二维码已上传", icon: "success" });
       },
       fail: () => {
@@ -87,11 +90,13 @@ Page({
       }
     });
   },
-  uploadPhotoQueue(tempPaths, index, uploadedImages) {
+  uploadPhotoQueue(tempPaths, index, uploadedImages, uploadedDisplays) {
     if (index >= tempPaths.length) {
       const photos = settingsModel.mergeImageList(this.data.form.storePhotos, uploadedImages);
+      const displayPhotos = settingsModel.mergeImageList(this.data.form.displayStorePhotos, uploadedDisplays);
       this.setData({
         "form.storePhotos": photos,
+        "form.displayStorePhotos": displayPhotos,
         uploadingPhotos: false
       });
       if (uploadedImages.length) {
@@ -111,18 +116,23 @@ Page({
       filePath: tempPath,
       success: (res) => {
         uploadedImages.push(res.fileID);
-        this.uploadPhotoQueue(tempPaths, index + 1, uploadedImages);
+        uploadedDisplays.push(tempPath);
+        this.uploadPhotoQueue(tempPaths, index + 1, uploadedImages, uploadedDisplays);
       },
       fail: () => {
         wx.showToast({ title: "图片上传失败", icon: "none" });
-        this.uploadPhotoQueue(tempPaths, index + 1, uploadedImages);
+        this.uploadPhotoQueue(tempPaths, index + 1, uploadedImages, uploadedDisplays);
       }
     });
   },
   removeStorePhoto(event) {
     const index = Number(event.currentTarget.dataset.index);
     const photos = (this.data.form.storePhotos || []).filter((_, itemIndex) => itemIndex !== index);
-    this.setData({ "form.storePhotos": photos });
+    const displayPhotos = (this.data.form.displayStorePhotos || []).filter((_, itemIndex) => itemIndex !== index);
+    this.setData({
+      "form.storePhotos": photos,
+      "form.displayStorePhotos": displayPhotos
+    });
   },
   saveStore() {
     const store = settingsModel.normalizeStore(this.data.form);

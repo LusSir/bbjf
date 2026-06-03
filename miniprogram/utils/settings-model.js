@@ -27,11 +27,13 @@ function normalizeStore(input) {
     phone: trimText(store.phone),
     wechatId: trimText(store.wechatId),
     wechatQrCode: trimText(store.wechatQrCode),
+    displayWechatQrCode: trimText(store.displayWechatQrCode),
     address: trimText(store.address),
     businessHours: trimText(store.businessHours) || "8:00-18:00",
     latitude: numberOrNull(store.latitude),
     longitude: numberOrNull(store.longitude),
     storePhotos: normalizeImageList(store.storePhotos),
+    displayStorePhotos: normalizeImageList(store.displayStorePhotos),
     shareTitle: trimText(store.shareTitle) || `${name}成品床品，到店可看实物`
   };
 }

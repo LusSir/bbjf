@@ -50,7 +50,7 @@
     <view class="form-field">
       <view class="field-label">微信二维码</view>
       <view class="image-edit-row">
-        <image wx:if="{{form.wechatQrCode}}" class="qr-preview" src="{{form.wechatQrCode}}" mode="aspectFit" />
+        <image wx:if="{{form.displayWechatQrCode}}" class="qr-preview" src="{{form.displayWechatQrCode}}" mode="aspectFit" />
         <view wx:else class="image-empty">未上传</view>
         <button class="small-button" loading="{{uploadingQr}}" bindtap="chooseWechatQr">上传二维码</button>
       </view>
@@ -62,7 +62,7 @@
       <view wx:if="{{!form.storePhotos.length}}" class="image-empty wide">还没有门店实拍图</view>
       <view class="photo-grid">
         <view wx:for="{{form.storePhotos}}" wx:key="*this" class="photo-item">
-          <image class="photo-preview" src="{{item}}" mode="aspectFill" />
+          <image class="photo-preview" src="{{form.displayStorePhotos[index] || item}}" mode="aspectFill" />
           <button class="tiny-button danger" data-index="{{index}}" bindtap="removeStorePhoto">删除</button>
         </view>
       </view>

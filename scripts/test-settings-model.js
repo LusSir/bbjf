@@ -10,7 +10,9 @@ const store = model.normalizeStore({
   latitude: "27.686643",
   longitude: "106.935789",
   wechatQrCode: "cloud://qr",
+  displayWechatQrCode: "https://tmp.example/qr.jpg",
   storePhotos: [" cloud://one ", "", "cloud://two"],
+  displayStorePhotos: [" https://tmp.example/one.jpg ", "", "https://tmp.example/two.jpg"],
   shareTitle: ""
 });
 
@@ -19,6 +21,8 @@ assert.strictEqual(store.phone, "18585204552");
 assert.strictEqual(store.latitude, 27.686643);
 assert.strictEqual(store.longitude, 106.935789);
 assert.deepStrictEqual(store.storePhotos, ["cloud://one", "cloud://two"]);
+assert.strictEqual(store.displayWechatQrCode, "https://tmp.example/qr.jpg");
+assert.deepStrictEqual(store.displayStorePhotos, ["https://tmp.example/one.jpg", "https://tmp.example/two.jpg"]);
 assert.strictEqual(store.shareTitle, "贝贝家纺成品床品，到店可看实物");
 
 assert.deepStrictEqual(

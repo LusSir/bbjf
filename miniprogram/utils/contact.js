@@ -7,7 +7,8 @@ function getStore(store) {
 
 function openWechatQrCode(store) {
   const currentStore = getStore(store);
-  if (!currentStore.wechatQrCode) {
+  const qrCode = currentStore.displayWechatQrCode || currentStore.wechatQrCode;
+  if (!qrCode) {
     wx.showModal({
       title: "微信咨询",
       content: "微信二维码还未配置，请在商铺管理里上传二维码。",
@@ -16,7 +17,7 @@ function openWechatQrCode(store) {
     return;
   }
 
-  cloudImage.resolveCloudFileUrl(currentStore.wechatQrCode).then((src) => {
+  cloudImage.resolveCloudFileUrl(qrCode).then((src) => {
     wx.getImageInfo({
       src,
       success(res) {

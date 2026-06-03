@@ -43,6 +43,64 @@ function normalizeStore(input) {
   };
 }
 
+function isCloudFileId(url) {
+  return String(url || "").trim().startsWith("cloud://");
+}
+
+function isRenderableImageUrl(url) {
+  const value = String(url || "").trim();
+  if (!value) return false;
+  return value.startsWith("/") || value.startsWith("http://") || value.startsWith("https://");
+}
+
+async function resolveCloudFileUrls(urls) {
+  const sourceUrls = Array.isArray(urls) ? urls : [];
+  const cloudUrls = Array.from(new Set(sourceUrls.filter(isCloudFileId)));
+  if (!cloudUrls.length) return sourceUrls;
+
+  try {
+    const result = await cloud.getTempFileURL({
+      fileList: cloudUrls.map((fileID) => ({ fileID, maxAge: 60 * 60 }))
+    });
+    const urlMap = {};
+    const fileList = result && Array.isArray(result.fileList) ? result.fileList : [];
+    fileList.forEach((item) => {
+      if (item && item.fileID && item.tempFileURL) {
+        urlMap[item.fileID] = item.tempFileURL;
+      } else if (item && item.fileID) {
+        console.warn("[bbjf] settings getTempFileURL empty", {
+          fileID: item.fileID,
+          status: item.status,
+          errMsg: item.errMsg
+        });
+      }
+    });
+    return sourceUrls.map((url) => urlMap[url] || url);
+  } catch (error) {
+    console.warn("[bbjf] settings getTempFileURL failed", {
+      fileList: cloudUrls,
+      message: error && error.message ? error.message : String(error || "")
+    });
+    return sourceUrls;
+  }
+}
+
+async function attachDisplayStoreImages(store) {
+  if (!store) return store;
+  const storePhotos = normalizeImageList(store.storePhotos);
+  const sourceUrls = [store.wechatQrCode].concat(storePhotos);
+  const resolvedUrls = await resolveCloudFileUrls(sourceUrls);
+
+  return {
+    ...store,
+    displayWechatQrCode: isRenderableImageUrl(resolvedUrls[0]) ? resolvedUrls[0] : "",
+    displayStorePhotos: storePhotos.map((photo, index) => {
+      const displayUrl = resolvedUrls[index + 1];
+      return isRenderableImageUrl(displayUrl) ? displayUrl : "";
+    })
+  };
+}
+
 function normalizeCategory(input, options) {
   const category = input || {};
   const allowEmptyId = Boolean(options && options.allowEmptyId);
@@ -199,10 +257,10 @@ async function main(event) {
   const data = event && event.data ? event.data : {};
 
   if (action === "getStore") {
-    return { store: await getStore() };
+    return { store: await attachDisplayStoreImages(await getStore()) };
   }
   if (action === "saveStore") {
-    return { store: await saveStore(data.store, wxContext.OPENID) };
+    return { store: await attachDisplayStoreImages(await saveStore(data.store, wxContext.OPENID)) };
   }
   if (action === "listCategories") {
     return { categories: await listCategories(Boolean(data.includeDisabled)) };

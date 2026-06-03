@@ -36,7 +36,7 @@
       </view>
       <view wx:if="{{!form.images.length}}" class="image-empty">还没有上传花色图</view>
       <view wx:for="{{form.images}}" wx:key="url" class="color-image-row">
-        <image class="form-image" src="{{item.url}}" mode="aspectFill" />
+        <image class="form-image" src="{{item.displayUrl || item.url}}" mode="aspectFill" />
         <view class="color-image-main">
           <input class="color-name-input" value="{{item.name}}" data-index="{{index}}" bindinput="updateImageName" placeholder="花色名称，如：米白小花" />
           <view class="image-actions">
@@ -73,7 +73,7 @@
           <button class="tiny-button" data-index="{{index}}" bindtap="useSkuMainImage">用主图</button>
         </view>
         <view class="sku-edit-foot">
-          <input class="field-input short-input" type="number" value="{{item.sort}}" data-index="{{index}}" data-field="sort" bindinput="updateSkuField" placeholder="排序" />
+          <input class="field-input short-input sku-sort-input" type="number" value="{{item.sort}}" data-index="{{index}}" data-field="sort" bindinput="updateSkuField" placeholder="排序" />
           <button class="tiny-button danger" data-index="{{index}}" bindtap="removeSku">删除规格</button>
         </view>
       </view>
@@ -114,9 +114,12 @@
       </label>
     </view>
 
-    <view class="form-field inline-field">
-      <view class="field-label">排序</view>
-      <input class="field-input short-input" type="number" value="{{form.sort}}" data-field="sort" bindinput="updateField" />
+    <view class="form-field sort-card">
+      <view class="sort-copy">
+        <view class="field-label">排序</view>
+        <view class="sort-help">数字越小越靠前，默认 999</view>
+      </view>
+      <input class="field-input sort-input" type="number" value="{{form.sort}}" data-field="sort" bindinput="updateField" />
     </view>
 
     <button class="primary-button" loading="{{saving}}" bindtap="saveProduct">保存商品</button>

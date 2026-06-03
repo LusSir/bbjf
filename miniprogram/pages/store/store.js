@@ -33,10 +33,18 @@ Page({
   resolveStoreImages(store) {
     const currentStore = store || fallbackStore;
     const storePhotos = currentStore.storePhotos || [];
-    return cloudImage.resolveCloudFileUrls([currentStore.wechatQrCode].concat(storePhotos))
+    const displayStorePhotos = currentStore.displayStorePhotos || [];
+    const sourceUrls = [currentStore.displayWechatQrCode || currentStore.wechatQrCode]
+      .concat(storePhotos.map((photo, index) => displayStorePhotos[index] || photo));
+    return cloudImage.resolveCloudFileUrls(sourceUrls)
       .then((urls) => Object.assign({}, currentStore, {
-        wechatQrCode: urls[0] || currentStore.wechatQrCode,
-        storePhotos: urls.slice(1)
+        displayWechatQrCode: cloudImage.isRenderableImageUrl(currentStore.displayWechatQrCode || urls[0])
+          ? (currentStore.displayWechatQrCode || urls[0])
+          : "",
+        displayStorePhotos: urls.slice(1).map((url, index) => {
+          const displayUrl = displayStorePhotos[index] || url;
+          return cloudImage.isRenderableImageUrl(displayUrl) ? displayUrl : "";
+        })
       }));
   },
   onShareAppMessage() {
@@ -53,9 +61,11 @@ Page({
   },
   previewStorePhoto(event) {
     const current = event.currentTarget.dataset.src;
+    const urls = (this.data.store.displayStorePhotos || []).filter(Boolean);
+    if (!current || !urls.length) return;
     wx.previewImage({
       current,
-      urls: this.data.store.storePhotos
+      urls
     });
   },
   handlePhone() {

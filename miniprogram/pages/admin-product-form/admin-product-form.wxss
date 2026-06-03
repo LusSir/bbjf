@@ -220,6 +220,49 @@
   width: 180rpx;
 }
 
+.sku-sort-input {
+  width: 150rpx;
+  text-align: center;
+}
+
+.sort-card {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 22rpx;
+  padding: 22rpx;
+  border: 2rpx solid rgba(79, 118, 105, 0.14);
+  border-radius: 18rpx;
+  background: #f7f4ef;
+}
+
+.sort-copy {
+  flex: 1;
+  min-width: 0;
+}
+
+.sort-copy .field-label {
+  margin-bottom: 6rpx;
+}
+
+.sort-help {
+  color: #6f7a72;
+  font-size: 23rpx;
+  line-height: 1.35;
+}
+
+.sort-input {
+  flex: 0 0 150rpx;
+  width: 150rpx;
+  min-height: 72rpx;
+  padding: 0 12rpx;
+  background: #ffffff;
+  color: #4f7669;
+  font-size: 30rpx;
+  font-weight: 900;
+  text-align: center;
+}
+
 .primary-button {
   margin-top: 30rpx;
   border-radius: 16rpx;

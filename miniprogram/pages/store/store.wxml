@@ -50,9 +50,9 @@
     <view class="section-title">微信咨询</view>
     <view class="qr-content" bindtap="previewWechatQr">
       <image
-        wx:if="{{store.wechatQrCode}}"
+        wx:if="{{store.displayWechatQrCode}}"
         class="wechat-qr"
-        src="{{store.wechatQrCode}}"
+        src="{{store.displayWechatQrCode}}"
         mode="aspectFit"
         show-menu-by-longpress="{{true}}"
       />
@@ -63,9 +63,9 @@
 
   <view class="section card photo-card">
     <view class="section-title">门店实拍</view>
-    <scroll-view wx:if="{{store.storePhotos && store.storePhotos.length}}" class="store-photo-list" scroll-x enable-flex>
+    <scroll-view wx:if="{{store.displayStorePhotos && store.displayStorePhotos.length}}" class="store-photo-list" scroll-x enable-flex>
       <image
-        wx:for="{{store.storePhotos}}"
+        wx:for="{{store.displayStorePhotos}}"
         wx:key="*this"
         class="store-photo"
         src="{{item}}"

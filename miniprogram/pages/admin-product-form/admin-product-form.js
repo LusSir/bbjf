@@ -130,7 +130,8 @@ Page({
       success: (res) => {
         uploadedImages.push({
           name: "",
-          url: res.fileID
+          url: res.fileID,
+          displayUrl: tempPath
         });
         this.uploadImageQueue(tempPaths, index + 1, uploadedImages, uploadBatchId);
       },
