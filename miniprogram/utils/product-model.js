@@ -12,7 +12,7 @@ function splitLines(value) {
 function normalizeImage(value) {
   const image = trimText(value);
   if (!image) return "";
-  if (image.startsWith("cloud://") || image.startsWith("http://") || image.startsWith("https://") || image.startsWith("/")) {
+  if (image.startsWith("cloud://") || image.startsWith("http://") || image.startsWith("https://") || image.startsWith("wxfile://") || image.startsWith("/")) {
     return image;
   }
   return `/assets/products/${image}`;

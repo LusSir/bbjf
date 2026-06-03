@@ -104,6 +104,19 @@
   background: #f4f6f1;
 }
 
+.color-image-empty {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+  padding: 18rpx;
+  color: #6f7a72;
+  font-size: 24rpx;
+  font-weight: 800;
+  text-align: center;
+  white-space: normal;
+}
+
 .color-name {
   margin-top: 10rpx;
   color: #43564d;

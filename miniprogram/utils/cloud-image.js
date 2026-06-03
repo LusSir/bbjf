@@ -7,7 +7,8 @@ function isRenderableImageUrl(url) {
   if (!value || value.includes("<") || value.includes(">")) return false;
   return value.startsWith("/")
     || value.startsWith("http://")
-    || value.startsWith("https://");
+    || value.startsWith("https://")
+    || value.startsWith("wxfile://");
 }
 
 function resolveCloudFileUrls(urls) {
@@ -19,6 +20,28 @@ function resolveCloudFileUrls(urls) {
   }
 
   return new Promise((resolve) => {
+    const finishWithFallback = (resolvedUrls) => {
+      const unresolvedCloudUrls = resolvedUrls.filter(isCloudFileId);
+      if (!unresolvedCloudUrls.length || !wx.cloud.downloadFile) {
+        resolve(resolvedUrls);
+        return;
+      }
+
+      Promise.all(unresolvedCloudUrls.map((fileID) => new Promise((downloadResolve) => {
+        wx.cloud.downloadFile({
+          fileID,
+          success: (res) => downloadResolve([fileID, res.tempFilePath || ""]),
+          fail: () => downloadResolve([fileID, ""])
+        });
+      }))).then((entries) => {
+        const downloadMap = {};
+        entries.forEach((entry) => {
+          if (entry[1]) downloadMap[entry[0]] = entry[1];
+        });
+        resolve(resolvedUrls.map((url) => downloadMap[url] || url));
+      }).catch(() => resolve(resolvedUrls));
+    };
+
     const finish = (result) => {
       const urlMap = {};
       const fileList = result && Array.isArray(result.fileList) ? result.fileList : [];
@@ -27,21 +50,21 @@ function resolveCloudFileUrls(urls) {
           urlMap[item.fileID] = item.tempFileURL;
         }
       });
-      resolve(sourceUrls.map((url) => urlMap[url] || url));
+      finishWithFallback(sourceUrls.map((url) => urlMap[url] || url));
     };
 
     try {
       const task = wx.cloud.getTempFileURL({
         fileList: cloudUrls,
         success: finish,
-        fail: () => resolve(sourceUrls)
+        fail: () => finishWithFallback(sourceUrls)
       });
 
       if (task && typeof task.then === "function") {
-        task.then(finish).catch(() => resolve(sourceUrls));
+        task.then(finish).catch(() => finishWithFallback(sourceUrls));
       }
     } catch (error) {
-      resolve(sourceUrls);
+      finishWithFallback(sourceUrls);
     }
   });
 }

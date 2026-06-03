@@ -1,7 +1,38 @@
 const store = require("../../config/store");
 const cartService = require("../../utils/cart-service");
+const cloudImage = require("../../utils/cloud-image");
 const productsService = require("../../utils/products-service");
 const productModel = require("../../utils/product-model");
+
+function sanitizeImageUrl(url) {
+  return cloudImage.isRenderableImageUrl(url) ? url : "";
+}
+
+function resolveProductImages(product) {
+  const item = product || {};
+  const images = productModel.normalizeProductImages(item.images);
+  const skus = productModel.normalizeProductSkus(item.skus, item);
+  const sourceUrls = [item.image]
+    .concat(images.map((image) => image.url))
+    .concat(skus.map((sku) => sku.image));
+
+  return cloudImage.resolveCloudFileUrls(sourceUrls).then((resolvedUrls) => {
+    const imageCount = images.length;
+    const primaryImage = sanitizeImageUrl(resolvedUrls[0]);
+    const resolvedImages = images.map((image, index) => Object.assign({}, image, {
+      displayUrl: sanitizeImageUrl(resolvedUrls[index + 1])
+    }));
+    const resolvedSkus = skus.map((sku, index) => Object.assign({}, sku, {
+      image: sanitizeImageUrl(resolvedUrls[index + 1 + imageCount])
+    }));
+
+    return Object.assign({}, item, {
+      image: primaryImage || (resolvedImages[0] ? resolvedImages[0].displayUrl : ""),
+      images: resolvedImages,
+      skus: resolvedSkus
+    });
+  });
+}
 
 Page({
   data: {
@@ -18,19 +49,23 @@ Page({
       }
 
       const normalizedProduct = productModel.normalizeProductForCart(product);
-      const selectedSku = productModel.getDefaultSku(normalizedProduct);
-      const images = productModel.normalizeProductImages(normalizedProduct.images);
-      wx.setNavigationBarTitle({ title: normalizedProduct.name });
-      this.setData({
-        product: Object.assign({}, normalizedProduct, { images }),
-        selectedSku,
-        selectedSkuId: selectedSku ? selectedSku.id : ""
+      resolveProductImages(normalizedProduct).then((resolvedProduct) => {
+        const selectedSku = productModel.getDefaultSku(resolvedProduct);
+        wx.setNavigationBarTitle({ title: resolvedProduct.name });
+        this.setData({
+          product: resolvedProduct,
+          selectedSku,
+          selectedSkuId: selectedSku ? selectedSku.id : ""
+        });
       });
     });
   },
   previewColorImage(event) {
     const current = event.currentTarget.dataset.url;
-    const urls = (this.data.product.images || []).map((item) => item.url);
+    const urls = (this.data.product.images || [])
+      .map((item) => item.displayUrl)
+      .filter(Boolean);
+    if (!current || !urls.length) return;
     wx.previewImage({
       current,
       urls

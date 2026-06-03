@@ -18,8 +18,9 @@
   <view wx:if="{{product.images && product.images.length}}" class="section card detail-section">
     <view class="section-title">可选花色</view>
     <scroll-view class="color-scroll" scroll-x enable-flex>
-      <view wx:for="{{product.images}}" wx:key="url" class="color-card" data-url="{{item.url}}" bindtap="previewColorImage">
-        <image class="color-image" src="{{item.url}}" mode="aspectFill" />
+      <view wx:for="{{product.images}}" wx:key="url" class="color-card" data-url="{{item.displayUrl}}" bindtap="previewColorImage">
+        <image wx:if="{{item.displayUrl}}" class="color-image" src="{{item.displayUrl}}" mode="aspectFill" />
+        <view wx:else class="color-image color-image-empty">{{item.name || '花色'}}</view>
         <view class="color-name">{{item.name || '花色图'}}</view>
       </view>
     </scroll-view>
