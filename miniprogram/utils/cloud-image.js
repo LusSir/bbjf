@@ -11,6 +11,12 @@ function isRenderableImageUrl(url) {
     || value.startsWith("wxfile://");
 }
 
+function warnCloudImage(message, detail) {
+  if (typeof console !== "undefined" && console.warn) {
+    console.warn(`[bbjf] ${message}`, detail || "");
+  }
+}
+
 function resolveCloudFileUrls(urls) {
   const sourceUrls = Array.isArray(urls) ? urls : [];
   const cloudUrls = sourceUrls.filter(isCloudFileId);
@@ -20,10 +26,18 @@ function resolveCloudFileUrls(urls) {
   }
 
   return new Promise((resolve) => {
+    let settled = false;
+    let timerId = null;
+    const settle = (resolvedUrls) => {
+      if (settled) return;
+      settled = true;
+      if (timerId) clearTimeout(timerId);
+      resolve(resolvedUrls);
+    };
     const finishWithFallback = (resolvedUrls) => {
       const unresolvedCloudUrls = resolvedUrls.filter(isCloudFileId);
       if (!unresolvedCloudUrls.length || !wx.cloud.downloadFile) {
-        resolve(resolvedUrls);
+        settle(resolvedUrls);
         return;
       }
 
@@ -31,15 +45,21 @@ function resolveCloudFileUrls(urls) {
         wx.cloud.downloadFile({
           fileID,
           success: (res) => downloadResolve([fileID, res.tempFilePath || ""]),
-          fail: () => downloadResolve([fileID, ""])
+          fail: (error) => {
+            warnCloudImage("downloadFile failed", { fileID, error });
+            downloadResolve([fileID, ""]);
+          }
         });
       }))).then((entries) => {
         const downloadMap = {};
         entries.forEach((entry) => {
           if (entry[1]) downloadMap[entry[0]] = entry[1];
         });
-        resolve(resolvedUrls.map((url) => downloadMap[url] || url));
-      }).catch(() => resolve(resolvedUrls));
+        settle(resolvedUrls.map((url) => downloadMap[url] || url));
+      }).catch((error) => {
+        warnCloudImage("downloadFile fallback failed", error);
+        settle(resolvedUrls);
+      });
     };
 
     const finish = (result) => {
@@ -57,15 +77,29 @@ function resolveCloudFileUrls(urls) {
       const task = wx.cloud.getTempFileURL({
         fileList: cloudUrls,
         success: finish,
-        fail: () => finishWithFallback(sourceUrls)
+        fail: (error) => {
+          warnCloudImage("getTempFileURL failed", { fileList: cloudUrls, error });
+          finishWithFallback(sourceUrls);
+        }
       });
 
       if (task && typeof task.then === "function") {
-        task.then(finish).catch(() => finishWithFallback(sourceUrls));
+        task.then(finish).catch((error) => {
+          warnCloudImage("getTempFileURL promise failed", { fileList: cloudUrls, error });
+          finishWithFallback(sourceUrls);
+        });
       }
     } catch (error) {
+      warnCloudImage("getTempFileURL threw", { fileList: cloudUrls, error });
       finishWithFallback(sourceUrls);
     }
+
+    timerId = setTimeout(() => {
+      if (!settled) {
+        warnCloudImage("resolve cloud image timeout", cloudUrls);
+        finishWithFallback(sourceUrls);
+      }
+    }, 3000);
   });
 }
 
