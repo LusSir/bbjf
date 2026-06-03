@@ -157,12 +157,21 @@ Page({
   },
   removeProductImage(event) {
     const index = Number(event.currentTarget.dataset.index);
+    const removedImage = (this.data.form.images || [])[index];
     const images = (this.data.form.images || []).filter((_, itemIndex) => itemIndex !== index);
     const currentImage = this.data.form.image;
     const stillExists = images.some((item) => item.url === currentImage);
+    const skus = (this.data.form.skus || []).map((sku) => {
+      if (!removedImage || sku.image !== removedImage.url) return sku;
+      return Object.assign({}, sku, {
+        image: "",
+        displayImage: ""
+      });
+    });
     this.setData({
       "form.images": images,
-      "form.image": stillExists ? currentImage : (images[0] ? images[0].url : "")
+      "form.image": stillExists ? currentImage : (images[0] ? images[0].url : ""),
+      "form.skus": skus
     });
   },
   addSku() {
@@ -193,10 +202,32 @@ Page({
       [`form.skus[${index}].status`]: event.detail.value ? "active" : "disabled"
     });
   },
+  findImageByUrl(url) {
+    return (this.data.form.images || []).find((item) => item.url === url) || null;
+  },
+  selectSkuImage(event) {
+    const skuIndex = Number(event.currentTarget.dataset.skuIndex);
+    const imageIndex = Number(event.currentTarget.dataset.imageIndex);
+    const image = (this.data.form.images || [])[imageIndex];
+    if (!image) return;
+    this.setData({
+      [`form.skus[${skuIndex}].image`]: image.url,
+      [`form.skus[${skuIndex}].displayImage`]: image.displayUrl || ""
+    });
+  },
   useSkuMainImage(event) {
     const index = Number(event.currentTarget.dataset.index);
+    const image = this.findImageByUrl(this.data.form.image);
     this.setData({
-      [`form.skus[${index}].image`]: this.data.form.image || ""
+      [`form.skus[${index}].image`]: this.data.form.image || "",
+      [`form.skus[${index}].displayImage`]: image ? (image.displayUrl || "") : ""
+    });
+  },
+  clearSkuImage(event) {
+    const index = Number(event.currentTarget.dataset.index);
+    this.setData({
+      [`form.skus[${index}].image`]: "",
+      [`form.skus[${index}].displayImage`]: ""
     });
   },
   removeSku(event) {

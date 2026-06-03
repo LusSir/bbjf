@@ -57,24 +57,48 @@
         </view>
         <button class="small-button" bindtap="addSku">新增规格</button>
       </view>
-      <view wx:for="{{form.skus}}" wx:key="id" class="sku-edit-card">
+      <view wx:for="{{form.skus}}" wx:for-item="sku" wx:for-index="skuIndex" wx:key="id" class="sku-edit-card">
         <view class="sku-edit-head">
-          <view class="sku-edit-title">规格 {{index + 1}}</view>
-          <switch checked="{{item.status === 'active'}}" data-index="{{index}}" bindchange="updateSkuStatus" color="#4f7669" />
+          <view class="sku-edit-title">规格 {{skuIndex + 1}}</view>
+          <switch checked="{{sku.status === 'active'}}" data-index="{{skuIndex}}" bindchange="updateSkuStatus" color="#4f7669" />
         </view>
         <view class="sku-edit-grid">
-          <input class="field-input" value="{{item.colorName}}" data-index="{{index}}" data-field="colorName" bindinput="updateSkuField" placeholder="花色名" />
-          <input class="field-input" value="{{item.size}}" data-index="{{index}}" data-field="size" bindinput="updateSkuField" placeholder="尺寸，如 1.5m / 1.8m" />
-          <input class="field-input" value="{{item.priceText}}" data-index="{{index}}" data-field="priceText" bindinput="updateSkuField" placeholder="价格文案" />
-          <input class="field-input" value="{{item.stockText}}" data-index="{{index}}" data-field="stockText" bindinput="updateSkuField" placeholder="库存说明" />
+          <input class="field-input" value="{{sku.colorName}}" data-index="{{skuIndex}}" data-field="colorName" bindinput="updateSkuField" placeholder="花色名" />
+          <input class="field-input" value="{{sku.size}}" data-index="{{skuIndex}}" data-field="size" bindinput="updateSkuField" placeholder="尺寸，如 1.5m / 1.8m" />
+          <input class="field-input" value="{{sku.priceText}}" data-index="{{skuIndex}}" data-field="priceText" bindinput="updateSkuField" placeholder="价格文案" />
+          <input class="field-input" value="{{sku.stockText}}" data-index="{{skuIndex}}" data-field="stockText" bindinput="updateSkuField" placeholder="库存说明" />
         </view>
-        <view class="sku-image-line">
-          <input class="field-input sku-image-input" value="{{item.image}}" data-index="{{index}}" data-field="image" bindinput="updateSkuField" placeholder="规格图片 fileID，可用主图" />
-          <button class="tiny-button" data-index="{{index}}" bindtap="useSkuMainImage">用主图</button>
+        <view class="sku-image-picker">
+          <view class="sku-image-top">
+            <view>
+              <view class="sku-image-label">规格图片</view>
+              <view class="sku-image-help">从已上传花色图中选择，保存时自动关联图片。</view>
+            </view>
+            <view class="sku-image-actions">
+              <button class="tiny-button" data-index="{{skuIndex}}" bindtap="useSkuMainImage">用主图</button>
+              <button class="tiny-button" data-index="{{skuIndex}}" bindtap="clearSkuImage">清除</button>
+            </view>
+          </view>
+          <scroll-view wx:if="{{form.images.length}}" class="sku-image-scroll" scroll-x enable-flex>
+            <view
+              wx:for="{{form.images}}"
+              wx:for-item="imageItem"
+              wx:for-index="imageIndex"
+              wx:key="url"
+              class="sku-image-option {{sku.image === imageItem.url ? 'active' : ''}}"
+              data-sku-index="{{skuIndex}}"
+              data-image-index="{{imageIndex}}"
+              bindtap="selectSkuImage"
+            >
+              <image class="sku-image-thumb" src="{{imageItem.displayUrl || imageItem.url}}" mode="aspectFill" />
+              <view class="sku-image-name">{{imageItem.name || '花色图'}}</view>
+            </view>
+          </scroll-view>
+          <view wx:else class="sku-image-empty">先上传花色图后再选择规格图片</view>
         </view>
         <view class="sku-edit-foot">
-          <input class="field-input short-input sku-sort-input" type="number" value="{{item.sort}}" data-index="{{index}}" data-field="sort" bindinput="updateSkuField" placeholder="排序" />
-          <button class="tiny-button danger" data-index="{{index}}" bindtap="removeSku">删除规格</button>
+          <input class="field-input short-input sku-sort-input" type="number" value="{{sku.sort}}" data-index="{{skuIndex}}" data-field="sort" bindinput="updateSkuField" placeholder="排序" />
+          <button class="tiny-button danger" data-index="{{skuIndex}}" bindtap="removeSku">删除规格</button>
         </view>
       </view>
     </view>
